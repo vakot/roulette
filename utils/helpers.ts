@@ -1,0 +1,95 @@
+/**
+ * Generates a random index based on probabilities defined in an array of numbers.
+ *
+ * @param {number[]} items An array of numbers representing probabilities.
+ * @returns {number} The index of the chosen item based on its probability (fallback: -1).
+ */
+export function getRandomIndexWithProbabilities(items: number[]): number | -1 {
+  // Calculate total sum of probabilities
+  const total = items.reduce((acc, item) => acc + item, 0)
+
+  // Generate a random number between 0 and total
+  let randomNumber = Math.random() * total
+
+  // Find the index corresponding to the random number
+  for (let i = 0; i < items.length; i++) {
+    const item = items[i]
+    const probability = item
+    if (randomNumber < probability) {
+      return i
+    }
+    randomNumber -= probability
+  }
+
+  return -1
+}
+
+/**
+ * Generates an array of probabilities (in decimal form) from an array of numbers.
+ * The probabilities are calculated using exponentiation to give higher chances to larger numbers while ensuring all numbers have a chance.
+ *
+ * @param {number[]} items An array of numbers.
+ * @param {number} exponent Exponent value for scaling probabilities (higher exponent gives higher chances to larger numbers).
+ * @returns {number[]} An array of probabilities in decimal form corresponding to each item.
+ */
+export function getProbabilities(items: number[], exponent: number = 0.75): number[] {
+  // Calculate scaled values using exponentiation
+  const scaledValues = items.map((item) => Math.pow(item, exponent))
+
+  // Calculate total sum of scaled values
+  const totalScaledValue = scaledValues.reduce((acc, value) => acc + value, 0)
+
+  // Calculate probabilities in decimal form
+  return scaledValues.map((value) => value / totalScaledValue)
+}
+
+/**
+ * Generates a random color in HEX format.
+ *
+ * @returns {string} Random color in HEX format (e.g., '#RRGGBB').
+ */
+export function getRandomColor(): string {
+  // Generate random RGB values
+  const r = Math.floor(Math.random() * 256) // Red component
+  const g = Math.floor(Math.random() * 256) // Green component
+  const b = Math.floor(Math.random() * 256) // Blue component
+
+  // Convert RGB to HEX format
+  return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`
+}
+
+/**
+ * Shuffles an array using the Fisher-Yates (Knuth) Shuffle algorithm.
+ *
+ * @template T The type of elements in the array.
+ * @param {T[]} array The array to shuffle.
+ * @returns {T[]} A new array with the elements shuffled.
+ */
+export function toShuffled<T>(array: T[]): T[] {
+  const shuffledArray = array.slice() // Create a copy of the array
+
+  for (let i = shuffledArray.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1)) // Random index from 0 to i
+    ;[shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]] // Swap elements
+  }
+
+  return shuffledArray
+}
+
+/**
+ * Duplicates an array a specified number of times and concatenates the copies into a single array.
+ *
+ * @template T The type of elements in the array.
+ * @param {T[]} array The array to duplicate.
+ * @param {number} times The number of times to duplicate the array.
+ * @returns {T[]} A new array containing the duplicated arrays.
+ */
+export function duplicateArray<T>(array: T[], times: number = 1): T[] {
+  let result: T[] = []
+
+  for (let i = 0; i < times; i++) {
+    result = [...result, ...array]
+  }
+
+  return result
+}

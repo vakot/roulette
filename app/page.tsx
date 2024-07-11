@@ -1,95 +1,97 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+'use client'
 
-export default function Home() {
+import { PlayersList } from '@components/PlayersList'
+import Roulette from '@components/Roulette'
+import { Player, usePlayers } from '@modules/hooks/usePlayers'
+import { getRandomIndexWithProbabilities } from '@utils/helpers'
+import { Badge, Button, Card } from 'antd'
+import { useCallback, useMemo, useState } from 'react'
+import styles from './page.module.css'
+
+export default function HomePage() {
+  const roulette = Roulette.useRoulette()
+
+  const [winner, setWinner] = useState<Player>()
+  const [target, setTarget] = useState<Player>()
+
+  // const players = useRandomPlayers(25)
+  const players = usePlayers()
+  // const probabilities = useProbabilities(players)
+
+  const bank = useMemo(() => {
+    return players.reduce((acc, { price }) => {
+      return (acc += price)
+    }, 0)
+  }, [players])
+
+  const handleSpin = useCallback(() => {
+    setWinner(undefined)
+
+    const index = target
+      ? players.findIndex(({ id }) => id === target.id)
+      : getRandomIndexWithProbabilities(players.map(({ price }) => price))
+
+    if (index < 0) {
+      return
+    }
+
+    roulette.current?.spin(index)
+  }, [roulette, target, players])
+
   return (
     <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
+      <div className={styles.column}>
+        {!!winner && (
+          <Card title="Congratulations!" className={styles.winner}>
+            <Badge.Ribbon text="Winner">
+              <PlayersList players={[winner]} />
+            </Badge.Ribbon>
+          </Card>
+        )}
+        <Card title="Total bank" className={styles.bank}>
+          {(bank * 0.9).toFixed(2)}$
+        </Card>
+        <Card className={styles.roulette}>
+          <Roulette
+            className={styles.roulette}
+            roulette={roulette}
+            items={players}
+            render={(player) => (
+              <div
+                style={{
+                  width: Math.min(Math.max(player.price / 5, 50), 250),
+                  height: '100%',
+                  backgroundColor: player.color
+                }}
+              />
+            )}
+            duration={players.length * 500}
+            fakes={Math.max(players.length / 2, 5)}
+            onFinish={(player) => setWinner(player)}
+          />
+        </Card>
+        <Button type="primary" block className={styles.button} onClick={handleSpin}>
+          Spin
+        </Button>
       </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
+      <div className={styles.column}>
+        <Card title="Admin panel" className={styles.admin}>
+          {!!target && (
+            <Badge.Ribbon text="Next winner">
+              <PlayersList players={[target]} />
+              <Button type="primary" danger block onClick={() => setTarget(undefined)}>
+                Clear
+              </Button>
+            </Badge.Ribbon>
+          )}
+        </Card>
+        <Card title="Players" className={styles.players}>
+          <p>*TODO: search by name*</p>
+          <p>*TODO: filter by price*</p>
+          <p>*TODO: sort by price acs or desc*</p>
+          <PlayersList players={players.sort(({ price: a }, { price: b }) => b - a)} onClick={(player) => setTarget(player)} />
+        </Card>
       </div>
     </main>
-  );
+  )
 }
