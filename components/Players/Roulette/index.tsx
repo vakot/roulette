@@ -1,25 +1,31 @@
 import Roulette, { RouletteProps } from '@components/Roulette'
 import { Player } from '@modules/hooks/usePlayers'
-import classNames from 'classnames'
-import styles from './styles.module.css'
+import { Avatar } from 'antd'
 
 export type PlayersRouletteProps = Omit<RouletteProps<Player>, 'render' | 'duration' | 'fakes'>
 
-export const PlayersRoulette: React.FC<PlayersRouletteProps> = ({ items, className, ...rest }) => {
+export const PlayersRoulette: React.FC<PlayersRouletteProps> = ({ items, ...rest }) => {
   return (
     <Roulette
-      className={classNames(styles.roulette, className)}
       items={items}
       render={(player) => (
         <div
           style={{
-            width: Math.min(Math.max(player.price / 5, 50), 250),
+            aspectRatio: 1,
             height: '100%',
-            backgroundColor: player.color
-          }}
-        />
+            backgroundColor: player.color,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}>
+          <Avatar
+            src={`https://api.dicebear.com/7.x/miniavs/svg?seed=${player.id}`}
+            alt="player"
+            style={{ backgroundColor: 'black', width: '50%', height: '50%' }}
+          />
+        </div>
       )}
-      duration={10_000}
+      duration={10000}
       fakes={10}
       {...rest}
     />

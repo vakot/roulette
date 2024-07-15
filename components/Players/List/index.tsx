@@ -2,7 +2,7 @@ import { AdminOnly } from '@components/Admin/AdminOnly'
 import { PlayerFilters } from '@components/Players/Filters'
 import { Player } from '@modules/hooks/usePlayers'
 import { Card, List, Space } from 'antd'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { PlayersListItem } from './ListItem'
 
 export type PlayerWithProbability = Player & { probability?: number }
@@ -15,6 +15,10 @@ export interface PlayersListProps {
 
 export const PlayersList: React.FC<PlayersListProps> = ({ players: _players, showFilters = false, onClick }) => {
   const [players, setPlayers] = useState<PlayerWithProbability[]>(_players)
+
+  useEffect(() => {
+    setPlayers(_players)
+  }, [_players])
 
   return (
     <Space direction="vertical" style={{ width: '100%' }}>

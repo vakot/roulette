@@ -1,13 +1,17 @@
 'use client'
 
+import Icon from '@ant-design/icons/lib/components/Icon'
 import { AdminPanel } from '@components/Admin/AdminPanel'
 import { PlayersList } from '@components/Players/List'
 import { PlayersRoulette } from '@components/Players/Roulette'
 import Roulette from '@components/Roulette'
 import { Player, usePlayers } from '@modules/hooks/usePlayers'
 import { useProbabilities } from '@modules/hooks/useProbabilities'
+import CoinIcon from '@public/coin-thumb-up-01.svg'
 import { getRandomIndexWithProbabilities } from '@utils/helpers'
 import { Button, Card } from 'antd'
+import classNames from 'classnames'
+import Image from 'next/image'
 import { useCallback, useMemo, useState } from 'react'
 import styles from './page.module.css'
 
@@ -24,10 +28,15 @@ export default function HomePage() {
 
   const probabilities = useProbabilities(players, exponent)
 
-  const bank = useMemo(() => {
-    return players.reduce((acc, { price }) => {
-      return (acc += price)
+  const { bank, _bank } = useMemo(() => {
+    const bank = players.reduce((acc, { price }) => {
+      return (acc += Number(price))
     }, 0)
+
+    return {
+      bank,
+      _bank: Number((bank * 0.9).toFixed(2))
+    }
   }, [players])
 
   const handleReset = useCallback(() => {
@@ -38,8 +47,6 @@ export default function HomePage() {
   }, [roulette])
 
   const handleSpin = useCallback(() => {
-    setWinner(undefined)
-
     const index = target
       ? players.findIndex(({ id }) => id === target.id)
       : getRandomIndexWithProbabilities(
@@ -62,16 +69,22 @@ export default function HomePage() {
     [roulette, players, getRandomPlayers]
   )
 
+  const handleAddPlayers = useCallback(
+    (p: Player[]) => {
+      roulette.current?.reset()
+      setPlayers([...players, ...p])
+    },
+    [roulette, players]
+  )
+
   return (
     <main className={styles.main}>
-      <div className={styles.column}>
-        {!!winner && (
-          <Card title="Congratulations!" className={styles.winner}>
-            <PlayersList players={[{ ...winner, probability: undefined }]} />
-          </Card>
-        )}
+      <div className={classNames(styles.block, styles['roulette-block'])}>
+        <Card title="Last winner" className={styles.winner}>
+          {!!winner && <PlayersList players={[{ ...winner, price: _bank, probability: undefined }]} />}
+        </Card>
         <Card title="Total bank" className={styles.bank}>
-          {(bank * 0.9).toFixed(2)}$
+          {bank.toFixed(2)} <Icon component={() => <Image src={CoinIcon} alt="coin" width={32} height={32} />} />
         </Card>
         <Card className={styles.roulette}>
           <PlayersRoulette className={styles.roulette} roulette={roulette} items={players} onFinish={(player) => setWinner(player)} />
@@ -79,22 +92,21 @@ export default function HomePage() {
         <Button type="primary" block className={styles.button} onClick={handleSpin}>
           Spin
         </Button>
-        {/* <Button type="primary" block ghost className={styles.button} onClick={() => roulette.current?.reset()}>
-          Reset
-        </Button> */}
       </div>
-      <div className={styles.column}>
-        <div className={styles.admin}>
-          <AdminPanel
-            target={target}
-            setTarget={setTarget}
-            exponent={exponent}
-            setExponent={setExponent}
-            handleAddRandomPlayers={handleAddRandomPlayers}
-            handleReset={handleReset}
-          />
-        </div>
-        <Card title={`Players - ${players.length}`} className={styles.players}>
+      <div className={classNames(styles.block, styles['admin-block'])}>
+        <AdminPanel
+          className={styles.admin}
+          target={target}
+          setTarget={setTarget}
+          exponent={exponent}
+          setExponent={setExponent}
+          handleAddRandomPlayers={handleAddRandomPlayers}
+          handleAddPlayers={handleAddPlayers}
+          handleReset={handleReset}
+        />
+      </div>
+      <div className={classNames(styles.block, styles['players-block'])}>
+        <Card title={`Players - ${players.length}`}>
           <PlayersList
             showFilters
             players={players.map((player) => ({

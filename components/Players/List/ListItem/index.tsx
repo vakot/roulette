@@ -1,5 +1,8 @@
+import Icon from '@ant-design/icons'
 import { Player } from '@modules/hooks/usePlayers'
+import CoinIcon from '@public/coin-thumb-up-01.svg'
 import { Avatar, List, Progress, Space } from 'antd'
+import Image from 'next/image'
 import { PlayerWithProbability } from '../'
 
 export interface PlayersListItemProps {
@@ -22,7 +25,11 @@ export const PlayersListItem: React.FC<PlayersListItemProps> = ({ player, onClic
           </Space>
         }
         title={player.name ?? 'anonim'}
-        description={`${player.price}$`}
+        description={
+          <>
+            {player.price} <Icon component={() => <Image src={CoinIcon} alt="coin" width={14} height={14} />} />
+          </>
+        }
       />
     </List.Item>
   )
