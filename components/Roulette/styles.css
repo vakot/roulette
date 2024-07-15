@@ -1,8 +1,5 @@
 .roulette-wrapper {
   position: relative;
-  min-width: 400px;
-  width: 400px;
-  min-height: 100px;
   overflow: hidden;
 }
 

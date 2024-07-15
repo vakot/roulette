@@ -1,6 +1,7 @@
 'use client'
 
 import { Layout } from 'antd'
+import styles from './style.module.css'
 
 export default function MainLayout({
   children
@@ -8,8 +9,8 @@ export default function MainLayout({
   children: React.ReactNode
 }>): React.ReactElement {
   return (
-    <Layout style={{ padding: 16 }}>
-      <Layout.Content>{children}</Layout.Content>
+    <Layout className={styles.layout}>
+      <Layout.Content className={styles['layout-content']}>{children}</Layout.Content>
     </Layout>
   )
 }

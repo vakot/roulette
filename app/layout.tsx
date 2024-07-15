@@ -1,7 +1,10 @@
 import MainLayout from '@components/Layout'
 import { Providers } from '@components/Providers'
 import type { Metadata } from 'next'
-import './globals.css'
+
+import '@styles/global.css'
+import '@styles/reset.css'
+import '@styles/variables.css'
 
 export const metadata: Metadata = {
   title: 'Roulette'

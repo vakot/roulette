@@ -1,26 +1,30 @@
 /**
- * Generates a random index based on probabilities defined in an array of numbers.
+ * Selects a random index from an array of numbers, with probabilities calculated using exponentiation.
+ * Higher values have higher chances of being selected.
  *
- * @param {number[]} items An array of numbers representing probabilities.
- * @returns {number} The index of the chosen item based on its probability (fallback: -1).
+ * @param {number[]} items An array of numbers.
+ * @param {number} exponent Exponent value for scaling probabilities (higher exponent gives higher chances to larger numbers).
+ * @returns {number} A random index from the array, selected based on the calculated probabilities (fallback: -1).
  */
-export function getRandomIndexWithProbabilities(items: number[]): number | -1 {
-  // Calculate total sum of probabilities
-  const total = items.reduce((acc, item) => acc + item, 0)
+export function getRandomIndexWithProbabilities(items: number[], exponent: number = 1.5): number {
+  const probabilities = getProbabilities(items, exponent)
 
-  // Generate a random number between 0 and total
-  let randomNumber = Math.random() * total
+  // Generate a random number between 0 and 1
+  const random = Math.random()
 
-  // Find the index corresponding to the random number
-  for (let i = 0; i < items.length; i++) {
-    const item = items[i]
-    const probability = item
-    if (randomNumber < probability) {
+  // Accumulate probabilities
+  let accumulator = 0
+
+  for (let i = 0; i < probabilities.length; i++) {
+    accumulator += probabilities[i]
+
+    // Return the index if the accumulated probability exceeds the random number
+    if (random < accumulator) {
       return i
     }
-    randomNumber -= probability
   }
 
+  // Fallback: return the last index (should not reach here if probabilities are correctly normalized)
   return -1
 }
 
@@ -32,7 +36,7 @@ export function getRandomIndexWithProbabilities(items: number[]): number | -1 {
  * @param {number} exponent Exponent value for scaling probabilities (higher exponent gives higher chances to larger numbers).
  * @returns {number[]} An array of probabilities in decimal form corresponding to each item.
  */
-export function getProbabilities(items: number[], exponent: number = 0.75): number[] {
+export function getProbabilities(items: number[], exponent: number = 1.5): number[] {
   // Calculate scaled values using exponentiation
   const scaledValues = items.map((item) => Math.pow(item, exponent))
 
