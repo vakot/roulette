@@ -97,3 +97,54 @@ export function duplicateArray<T>(array: T[], times: number = 1): T[] {
 
   return result
 }
+
+/**
+ * Generates a random name with a specified number of words from a single dictionary.
+ *
+ * @param {string[]} dictionary The list of words to use for generating the name (default: `greek alphabet`).
+ * @param {number} min The minimum number of words in the name (default: `1`).
+ * @param {number} max The maximum number of words in the name (default: `3`).
+ * @returns {string} The generated random name.
+ */
+export function getRandomName(
+  dictionary: string[] = [
+    'Alpha',
+    'Beta',
+    'Gamma',
+    'Delta',
+    'Epsilon',
+    'Zeta',
+    'Eta',
+    'Theta',
+    'Iota',
+    'Kappa',
+    'Lambda',
+    'Mu',
+    'Nu',
+    'Xi',
+    'Omicron',
+    'Pi',
+    'Rho',
+    'Sigma',
+    'Tau',
+    'Upsilon',
+    'Phi',
+    'Chi',
+    'Psi',
+    'Omega'
+  ],
+  min: number = 1,
+  max: number = 3
+): string {
+  const getRandomWord = (arr: string[]) => arr[Math.floor(Math.random() * arr.length)]
+
+  // Determine the number of words in the name
+  const length = Math.floor(Math.random() * (max - min + 1)) + min
+
+  let name = ''
+  for (let i = 0; i < length; i++) {
+    name += (i > 0 ? ' ' : '') + getRandomWord(dictionary)
+  }
+
+  return name
+}

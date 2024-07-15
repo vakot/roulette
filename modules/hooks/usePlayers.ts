@@ -1,4 +1,4 @@
-import { getRandomColor } from '@utils/helpers'
+import { getRandomColor, getRandomName } from '@utils/helpers'
 import { useCallback } from 'react'
 import { v1 as uuidv1 } from 'uuid'
 
@@ -33,7 +33,7 @@ export const usePlayers = (): {
   const getRandomPlayers = useCallback((length: number = 10) => {
     return Array.from({ length }).map((_, index) => ({
       id: uuidv1(),
-      name: `anonim`,
+      name: getRandomName(),
       price: Math.floor(Math.random() * 900 + 100),
       color: getRandomColor()
     }))

@@ -1,12 +1,13 @@
 'use client'
 
-import { PlayersRoulette } from '@components/Players'
+import { AdminPanel } from '@components/Admin/AdminPanel'
 import { PlayersList } from '@components/Players/List'
+import { PlayersRoulette } from '@components/Players/Roulette'
 import Roulette from '@components/Roulette'
 import { Player, usePlayers } from '@modules/hooks/usePlayers'
 import { useProbabilities } from '@modules/hooks/useProbabilities'
 import { getRandomIndexWithProbabilities } from '@utils/helpers'
-import { Badge, Button, Card, Input, Space, Tooltip } from 'antd'
+import { Button, Card } from 'antd'
 import { useCallback, useMemo, useState } from 'react'
 import styles from './page.module.css'
 
@@ -66,9 +67,7 @@ export default function HomePage() {
       <div className={styles.column}>
         {!!winner && (
           <Card title="Congratulations!" className={styles.winner}>
-            <Badge.Ribbon text="Winner">
-              <PlayersList players={[{ ...winner, probability: undefined }]} />
-            </Badge.Ribbon>
+            <PlayersList players={[{ ...winner, probability: undefined }]} />
           </Card>
         )}
         <Card title="Total bank" className={styles.bank}>
@@ -80,59 +79,28 @@ export default function HomePage() {
         <Button type="primary" block className={styles.button} onClick={handleSpin}>
           Spin
         </Button>
-        <Button type="primary" block ghost className={styles.button} onClick={handleReset}>
+        {/* <Button type="primary" block ghost className={styles.button} onClick={() => roulette.current?.reset()}>
           Reset
-        </Button>
+        </Button> */}
       </div>
       <div className={styles.column}>
-        <Card title="Admin panel" className={styles.admin}>
-          <Space direction="vertical" style={{ width: '100%' }}>
-            <Button type="primary" block onClick={() => handleAddRandomPlayers(10)}>
-              Add 10 random players
-            </Button>
-            <Button type="primary" block onClick={() => handleAddRandomPlayers(25)}>
-              Add 25 random players
-            </Button>
-            <Button type="primary" block onClick={() => handleAddRandomPlayers(50)}>
-              Add 50 random players
-            </Button>
-            {!!target && (
-              <Badge.Ribbon text="Next winner">
-                <PlayersList players={[{ ...target, probability: undefined }]} />
-                <Button type="primary" danger block onClick={() => setTarget(undefined)}>
-                  Clear
-                </Button>
-              </Badge.Ribbon>
-            )}
-            <Tooltip
-              title={
-                <ul>
-                  <li>{'>0 - higher chance to top'}</li>
-                  <li>{'0 - equal chance for all'}</li>
-                  <li>{'<0 - higher chance to bottom'}</li>
-                </ul>
-              }>
-              <Input
-                prefix="Exponent:"
-                type="number"
-                placeholder="modifier"
-                value={exponent}
-                onChange={(e) => setExponent(Number(e.target.value))}
-              />
-            </Tooltip>
-          </Space>
-        </Card>
+        <div className={styles.admin}>
+          <AdminPanel
+            target={target}
+            setTarget={setTarget}
+            exponent={exponent}
+            setExponent={setExponent}
+            handleAddRandomPlayers={handleAddRandomPlayers}
+            handleReset={handleReset}
+          />
+        </div>
         <Card title={`Players - ${players.length}`} className={styles.players}>
-          <p>*TODO: search by name*</p>
-          <p>*TODO: filter by price*</p>
-          <p>*TODO: sort by price acs or desc*</p>
           <PlayersList
-            players={[...players]
-              .sort(({ price: a }, { price: b }) => b - a)
-              .map((player) => ({
-                ...player,
-                probability: probabilities.find(({ id }) => id === player.id)?.value
-              }))}
+            showFilters
+            players={players.map((player) => ({
+              ...player,
+              probability: probabilities.find(({ id }) => id === player.id)?.value
+            }))}
             onClick={(player) => setTarget(player)}
           />
         </Card>
