@@ -14,7 +14,7 @@ export interface PlayersListProps {
 }
 
 export const PlayersList: React.FC<PlayersListProps> = ({ players: _players, showFilters = false, onClick }) => {
-  const [players, setPlayers] = useState<PlayerWithProbability[]>(_players)
+  const [players, setPlayers] = useState<PlayerWithProbability[]>([])
 
   useEffect(() => {
     setPlayers(_players)

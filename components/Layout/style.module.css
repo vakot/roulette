@@ -5,17 +5,47 @@
 
 .layout-content {
   padding: 8px;
+  margin-bottom: 64px;
 }
 
 .header {
+  position: sticky;
+  left: 0;
+  right: 0;
+  top: 0;
+
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 32px;
+
   color: white;
+
+  z-index: 9999;
 }
 .header > div {
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+.footer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+
+  height: 64px;
+  padding: 8px;
+
+  z-index: 9999;
+}
+.footer .button {
+  width: 48px;
+  height: 48px;
 }

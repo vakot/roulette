@@ -1,13 +1,21 @@
-import { Action, configureStore, ThunkAction } from '@reduxjs/toolkit'
+import { countApi } from '@modules/api/count/count.api'
+import { playerApi } from '@modules/api/player/player.api'
+import { configureStore } from '@reduxjs/toolkit'
+import playersReducer from './slices/players'
 import themeReducer from './slices/theme'
 
-export const store = configureStore({
-  reducer: {
-    theme: themeReducer
-  },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware()
-})
+export const makeStore = () => {
+  return configureStore({
+    reducer: {
+      players: playersReducer,
+      theme: themeReducer,
+      [countApi.reducerPath]: countApi.reducer,
+      [playerApi.reducerPath]: playerApi.reducer
+    },
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(countApi.middleware).concat(playerApi.middleware)
+  })
+}
 
-export type AppDispatch = typeof store.dispatch
-export type RootState = ReturnType<typeof store.getState>
-export type AppThunk<ReturnType = void> = ThunkAction<ReturnType, RootState, unknown, Action<string>>
+export type AppStore = ReturnType<typeof makeStore>
+export type RootState = ReturnType<AppStore['getState']>
+export type AppDispatch = AppStore['dispatch']

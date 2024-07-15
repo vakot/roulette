@@ -7,6 +7,7 @@ export interface Player {
   name?: string
   price: number
   color?: string
+  description?: string
 }
 
 const _players: Player[] = [
