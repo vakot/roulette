@@ -1,9 +1,11 @@
-import { PlayersListItem } from '@components/PlayersList/PlayersListItem'
 import { Player } from '@modules/hooks/usePlayers'
 import { List } from 'antd'
+import { PlayersListItem } from './ListItem'
+
+export type PlayerWithProbability = Player & { probability?: number }
 
 export interface PlayersListProps {
-  players: Player[]
+  players: PlayerWithProbability[]
   onClick?: (player: Player) => void
 }
 

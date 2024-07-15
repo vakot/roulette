@@ -1,5 +1,3 @@
-'use client'
-
 import { duplicateArray, toShuffled } from '@utils/helpers'
 import React, { useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react'
 import './styles.css'
@@ -7,10 +5,12 @@ import './styles.css'
 export type RouletteHandler = {
   // spinning: boolean
   spin: (target: number) => void
+  reset: () => void
 }
+export type RouletteInstance = React.RefObject<RouletteHandler>
 
 export interface RouletteProps<T = unknown> {
-  roulette?: React.RefObject<RouletteHandler>
+  roulette?: RouletteInstance
   items: Array<T>
   render?: (item: T) => React.ReactNode
   onFinish?: (item: T) => void
@@ -89,6 +89,16 @@ const RouletteComponent = <T,>(props: RouletteProps<T>, ref: React.ForwardedRef<
           setSpinning(false)
           onFinish?.(items[target])
         }, duration)
+      },
+      reset: () => {
+        if (!reelRef.current) {
+          return
+        }
+
+        reelRef.current.style.transition = 'none'
+        reelRef.current.style.transform = `translateX(50%)`
+
+        setSpinning(false)
       }
     }),
     [items, duration, spinning, onFinish]

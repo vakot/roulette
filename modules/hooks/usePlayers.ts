@@ -1,5 +1,5 @@
 import { getRandomColor } from '@utils/helpers'
-import { useMemo } from 'react'
+import { useCallback } from 'react'
 import { v1 as uuidv1 } from 'uuid'
 
 export interface Player {
@@ -9,50 +9,35 @@ export interface Player {
   color?: string
 }
 
-const _players: Omit<Player, 'id'>[] = [
-  {
-    price: 1000
-  },
-  {
-    price: 900
-  },
-  {
-    price: 800
-  },
-  {
-    price: 700
-  },
-  {
-    price: 600
-  },
-  {
-    price: 500
-  },
-  {
-    price: 400
-  },
-  {
-    price: 300
-  },
-  {
-    price: 200
-  },
-  {
-    price: 100
-  }
+const _players: Player[] = [
+  { id: uuidv1(), price: 1000 },
+  { id: uuidv1(), price: 900 },
+  { id: uuidv1(), price: 800 },
+  { id: uuidv1(), price: 700 },
+  { id: uuidv1(), price: 600 },
+  { id: uuidv1(), price: 500 },
+  { id: uuidv1(), price: 400 },
+  { id: uuidv1(), price: 300 },
+  { id: uuidv1(), price: 200 },
+  { id: uuidv1(), price: 100 }
 ]
 
-export const usePlayers = (players: Player[] = _players as any): Player[] =>
-  useMemo(() => {
-    return players.map((player) => ({ color: getRandomColor(), ...player, id: uuidv1() }))
-  }, [players])
+export const usePlayers = (): {
+  getPlayers: (players?: Player[]) => Player[]
+  getRandomPlayers: (length?: number) => Player[]
+} => {
+  const getPlayers = useCallback((players: Player[] = _players as any) => {
+    return players.map((player) => ({ color: getRandomColor(), ...player }))
+  }, [])
 
-export const useRandomPlayers = (length: number = 10): Player[] =>
-  useMemo(() => {
+  const getRandomPlayers = useCallback((length: number = 10) => {
     return Array.from({ length }).map((_, index) => ({
       id: uuidv1(),
-      name: `#${index + 1}`,
+      name: `anonim`,
       price: Math.floor(Math.random() * 900 + 100),
       color: getRandomColor()
     }))
-  }, [length])
+  }, [])
+
+  return { getPlayers, getRandomPlayers }
+}
