@@ -2,7 +2,7 @@
 
 .main {
   display: flex;
-  align-items: baseline;
+  align-items: flex-start;
   gap: 8px;
 }
 
@@ -49,6 +49,6 @@
     flex-direction: column;
   }
   .block {
-    flex: 1;
+    width: 100%;
   }
 }
