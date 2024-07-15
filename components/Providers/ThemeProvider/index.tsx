@@ -1,0 +1,17 @@
+'use client'
+
+import { useAppSelector } from '@modules/store/hooks'
+import { ConfigProvider, theme } from 'antd'
+
+export function ThemeProvider({ children }: { children: React.ReactNode }) {
+  const currentTheme = useAppSelector(({ theme }) => theme)
+
+  return (
+    <ConfigProvider
+      theme={{
+        algorithm: currentTheme === 'dark' ? theme.darkAlgorithm : theme.defaultAlgorithm
+      }}>
+      {children}
+    </ConfigProvider>
+  )
+}

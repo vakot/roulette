@@ -1,7 +1,10 @@
 import { Action, configureStore, ThunkAction } from '@reduxjs/toolkit'
+import themeReducer from './slices/theme'
 
 export const store = configureStore({
-  reducer: {},
+  reducer: {
+    theme: themeReducer
+  },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware()
 })
 
