@@ -2,30 +2,23 @@
 
 .main {
   display: flex;
-  align-items: flex-start;
-  gap: 8px;
+  gap: 16px;
 }
 
-.block {
+.column {
   display: flex;
+  flex: 1;
   flex-direction: column;
-  gap: 8px;
-}
-
-.admin-block {
-  flex: 0.5;
-}
-.players-block {
-  flex: 0.5;
+  gap: 16px;
 }
 
 /* RESPONSIVE */
 
-@media (max-width: 768px) {
+@media (max-width: 992px) {
   .main {
     flex-direction: column;
   }
-  .block {
+  .column {
     width: 100%;
   }
 }

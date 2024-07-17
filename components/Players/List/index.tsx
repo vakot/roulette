@@ -1,35 +1,53 @@
-import { AdminOnly } from '@components/Admin/AdminOnly'
+import { QuestionCircleOutlined } from '@ant-design/icons'
 import { PlayerFilters } from '@components/Players/Filters'
-import { Player } from '@modules/hooks/usePlayers'
-import { Card, List, Space } from 'antd'
-import { useEffect, useState } from 'react'
+import { useDeletePlayersMutation } from '@modules/api/player'
+import { IPlayer } from '@modules/models/Player'
+import { Button, List, Popconfirm, Space } from 'antd'
+import { useCallback, useEffect, useState } from 'react'
 import { PlayersListItem } from './ListItem'
+import styles from './styles.module.css'
 
-export type PlayerWithProbability = Player & { probability?: number }
+export type PlayerWithProbability = IPlayer & { probability?: number }
 
 export interface PlayersListProps {
-  players: PlayerWithProbability[]
+  players?: PlayerWithProbability[]
   showFilters?: boolean
-  onClick?: (player: Player) => void
+  editable?: boolean
+  onClick?: (player: IPlayer) => void
 }
 
-export const PlayersList: React.FC<PlayersListProps> = ({ players: _players, showFilters = false, onClick }) => {
+export const PlayersList: React.FC<PlayersListProps> = ({ players: items = [], showFilters = false, editable = false, onClick }) => {
   const [players, setPlayers] = useState<PlayerWithProbability[]>([])
 
+  const [deletePlayers] = useDeletePlayersMutation()
+
   useEffect(() => {
-    setPlayers(_players)
-  }, [_players])
+    setPlayers(items)
+  }, [items])
+
+  const handlePlayersDelete = useCallback(() => {
+    deletePlayers(players?.map(({ _id }) => _id))
+  }, [players, deletePlayers])
 
   return (
-    <Space direction="vertical" style={{ width: '100%' }}>
-      {showFilters && (
-        <AdminOnly>
-          <Card size="small" title="Filters">
-            <PlayerFilters players={_players} setPlayers={setPlayers} />
-          </Card>
-        </AdminOnly>
+    <Space direction="vertical" style={{ width: '100%' }} className={styles.list}>
+      {showFilters && <PlayerFilters players={items} setPlayers={setPlayers} />}
+      <List
+        itemLayout="horizontal"
+        dataSource={players}
+        renderItem={(item) => <PlayersListItem player={item} onClick={onClick} editable={editable} />}
+      />
+      {editable && (
+        <Popconfirm
+          title="Delete ALL players"
+          description="Are you sure to delete all players?"
+          icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
+          onConfirm={handlePlayersDelete}>
+          <Button type="primary" danger block>
+            Clear
+          </Button>
+        </Popconfirm>
       )}
-      <List itemLayout="horizontal" dataSource={players} renderItem={(item) => <PlayersListItem player={item} onClick={onClick} />} />
     </Space>
   )
 }

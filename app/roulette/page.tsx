@@ -6,7 +6,7 @@ import { Button, List, Space } from 'antd'
 import { useRouter } from 'next/navigation'
 import { useCallback } from 'react'
 
-export default function HomePage() {
+export default function RoulettesPage() {
   const router = useRouter()
 
   const { data: players } = usePlayersQuery()

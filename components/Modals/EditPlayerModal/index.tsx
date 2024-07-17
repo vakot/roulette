@@ -1,7 +1,8 @@
 import { EditPlayerForm } from '@components/Forms/EditPlayerForm'
-import { Player } from '@modules/hooks/usePlayers'
+import { IPlayer } from '@modules/models/Player'
+import { IRoulette } from '@modules/models/Roulette'
 import { Form, Modal, ModalProps } from 'antd'
-import { useCallback, useState } from 'react'
+import { useCallback } from 'react'
 
 export interface EditModalProps<T = unknown> extends Omit<ModalProps, 'onOk' | 'onCancel'> {
   onOk?: () => void
@@ -9,12 +10,14 @@ export interface EditModalProps<T = unknown> extends Omit<ModalProps, 'onOk' | '
   onFinish?: (player: T) => void
 }
 
-export interface EditPlayerModalProps extends EditModalProps<Player> {
-  player?: Player
+export interface EditPlayerModalProps extends EditModalProps<IPlayer> {
+  player?: IPlayer['_id']
+  roulette?: IRoulette['_id']
 }
 
 export const EditPlayerModal: React.FC<EditPlayerModalProps> = ({
   player,
+  roulette: rouletteId,
   onOk,
   onCancel,
   onFinish,
@@ -25,38 +28,44 @@ export const EditPlayerModal: React.FC<EditPlayerModalProps> = ({
   ...props
 }) => {
   const [form] = Form.useForm()
-  const [changed, setChanged] = useState<boolean>(false)
+  // const [changed, setChanged] = useState<boolean>(false)
 
-  const handleOkSubmit = useCallback(() => {
+  const handleOk = useCallback(() => {
     form.submit()
   }, [form])
 
-  const handleCancelSubmit = useCallback(() => {
-    if (onCancel) onCancel()
-    setChanged(false)
+  const handleCancel = useCallback(() => {
+    console.log('handleCancel')
+
     form.resetFields()
+    // setChanged(false)
+    onCancel?.()
   }, [form, onCancel])
 
-  const handleOk = handleOkSubmit
-
-  const handleCancel = handleCancelSubmit
-
   const handleFinish = useCallback(
-    (player: Player) => {
+    (player: IPlayer) => {
+      console.log('handleFinish')
+
       onFinish?.(player)
-      setChanged(false)
-      if (onOk) onOk()
+      // setChanged(false)
+      onOk?.()
     },
     [onOk, onFinish]
   )
 
-  const handleChange = useCallback(() => {
-    setChanged(true)
-  }, [])
+  // const handleChange = useCallback(() => {
+  //   setChanged(true)
+  // }, [])
 
   return (
     <Modal onOk={handleOk} onCancel={handleCancel} destroyOnClose={destroyOnClose} title="Edit player modal" {...props}>
-      <EditPlayerForm form={form} player={player} onChange={handleChange} onFinish={handleFinish} />
+      <EditPlayerForm
+        form={form}
+        player={player}
+        roulette={rouletteId}
+        // onChange={handleChange}
+        onFinish={handleFinish}
+      />
     </Modal>
   )
 }

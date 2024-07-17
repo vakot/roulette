@@ -25,8 +25,8 @@ export const PlayerFilters: React.FC<PlayerFiltersProps> = ({ players = [], setP
 
   const { min, max } = useMemo(() => {
     return {
-      min: Math.max(Math.min(...players.map(({ price }) => price)), 0),
-      max: Math.min(Math.max(...players.map(({ price }) => price)), 999_999)
+      min: Math.max(Math.min(...players.map(({ price }) => price ?? 0)), 0),
+      max: Math.min(Math.max(...players.map(({ price }) => price ?? 0)), 999_999)
     }
   }, [players])
 
@@ -37,7 +37,7 @@ export const PlayerFilters: React.FC<PlayerFiltersProps> = ({ players = [], setP
         (player) =>
           !price ||
           price.length < 2 ||
-          (player.price >= (isFinite(price[0]) ? price[0] : min) && player.price <= (isFinite(price[1]) ? price[1] : max))
+          ((player.price ?? 0) >= (isFinite(price[0]) ? price[0] : min) && (player.price ?? 0) <= (isFinite(price[1]) ? price[1] : max))
       )
 
     if (sort) {
@@ -67,17 +67,18 @@ export const PlayerFilters: React.FC<PlayerFiltersProps> = ({ players = [], setP
         <Form.Item name="name" noStyle>
           <Input placeholder="Search..." />
         </Form.Item>
+
         <Form.Item name="price" noStyle>
-          <Slider range min={min} max={max} />
+          <Slider step={10} range min={min} max={max} tooltip={{ formatter: (value) => value?.toFixed(0) }} />
         </Form.Item>
         <Flex gap={8}>
           <Form.Item name="sort" style={{ flex: 1, margin: 0 }}>
             <Select
               placeholder="Sort by"
               options={[
-                { label: 'name', value: 'name' },
-                { label: 'price', value: 'price' },
-                { label: 'probability', value: 'probability' }
+                { label: 'Name', value: 'name' },
+                { label: 'Price', value: 'price' },
+                { label: 'Probability', value: 'probability' }
               ]}
               suffixIcon={<FilterOutlined />}
               allowClear
@@ -90,10 +91,10 @@ export const PlayerFilters: React.FC<PlayerFiltersProps> = ({ players = [], setP
               onClick={() => form.setFieldValue('order', order === 'desc' ? 'asc' : 'desc')}
             />
           </Form.Item>
+          <Button type="primary" danger icon={<FilterOutlined />} onClick={() => form.resetFields()}>
+            Reset
+          </Button>
         </Flex>
-        <Button type="primary" ghost block danger onClick={() => form.resetFields()}>
-          Reset
-        </Button>
       </Space>
     </Form>
   )

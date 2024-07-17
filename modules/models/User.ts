@@ -1,3 +1,4 @@
+import { IDocument, timestamp } from '@modules/models/Document'
 import mongoose from 'mongoose'
 
 export enum Roles {
@@ -11,14 +12,14 @@ export interface IUser {
   image?: string
   roles: string[]
 }
-export type UserModelType = Omit<IUser, '_id'> & mongoose.Document
+export type UserModelType = Omit<IUser, '_id'> & IDocument
 
 export const UserSchema = new mongoose.Schema<UserModelType>({
   name: { type: String, required: false },
   email: { type: String, required: false },
   image: { type: String, required: false },
   roles: { type: [String], default: [] }
-})
+}).plugin(timestamp)
 
 const User = mongoose.models.User<mongoose.Model<UserModelType>> || mongoose.model<UserModelType>('User', UserSchema)
 

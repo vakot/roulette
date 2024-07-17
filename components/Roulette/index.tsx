@@ -11,7 +11,7 @@ export type RouletteInstance = React.RefObject<RouletteHandler>
 
 export interface RouletteProps<T = unknown> {
   roulette?: RouletteInstance
-  items: Array<T>
+  items?: Array<T>
   render?: (item: T) => React.ReactNode
   onFinish?: (item: T) => void
   duration?: number
@@ -23,19 +23,25 @@ export interface RouletteProps<T = unknown> {
 const RouletteComponent = <T,>(props: RouletteProps<T>, ref: React.ForwardedRef<HTMLDivElement>): React.ReactElement => {
   const { roulette, items, render, onFinish, duration = 10000, fakes = 5, className, style } = props
 
-  const [minFakes, setMinFakes] = useState<number>(0)
   const [spinning, setSpinning] = useState<boolean>(false)
 
   const wrapperRef = useRef<HTMLDivElement | null>(null)
   const reelRef = useRef<HTMLDivElement | null>(null)
   const itemRefs = useRef<Array<HTMLDivElement | null>>([])
 
-  useEffect(() => {
-    const getDimensions = () => {
-      const wrapperWidth = wrapperRef.current?.offsetWidth ?? 0
-      const itemsWidth = itemRefs.current.reduce((acc, item) => acc + item!.offsetWidth, 0) ?? 0
-      setMinFakes(itemsWidth ? Math.ceil(wrapperWidth / itemsWidth) : 1)
+  const [wrapperWidth, setWrapperWidth] = useState<number>(0)
+  const [itemsWidth, setItemsWidth] = useState<number>(0)
+
+  const minFakes = useMemo(() => {
+    if (wrapperWidth > 0 && itemsWidth > 0) {
+      return Math.max(Math.ceil(wrapperWidth / itemsWidth), 1)
+    } else {
+      return 1
     }
+  }, [wrapperWidth, itemsWidth])
+
+  useEffect(() => {
+    const getDimensions = () => setWrapperWidth(wrapperRef.current?.offsetWidth ?? 0)
 
     getDimensions()
 
@@ -46,7 +52,8 @@ const RouletteComponent = <T,>(props: RouletteProps<T>, ref: React.ForwardedRef<
   }, [])
 
   useEffect(() => {
-    itemRefs.current = itemRefs.current.slice(0, items.length)
+    itemRefs.current = itemRefs.current.slice(0, items?.length)
+    setItemsWidth(itemRefs.current.reduce((acc, item) => acc + item!.offsetWidth, 0) ?? 0)
   }, [items])
 
   const fakeItemsEnd = useMemo(() => {
@@ -59,7 +66,7 @@ const RouletteComponent = <T,>(props: RouletteProps<T>, ref: React.ForwardedRef<
   useImperativeHandle(
     roulette,
     () => ({
-      spin: (target = Math.floor(Math.random() * (items.length - 1))) => {
+      spin: (target = Math.floor(Math.random() * ((items?.length ?? 0) - 1))) => {
         if (spinning) {
           return
         }
@@ -87,7 +94,7 @@ const RouletteComponent = <T,>(props: RouletteProps<T>, ref: React.ForwardedRef<
 
         setTimeout(() => {
           setSpinning(false)
-          onFinish?.(items[target])
+          onFinish?.(items?.[target]!)
         }, duration)
       },
       reset: () => {
@@ -112,7 +119,7 @@ const RouletteComponent = <T,>(props: RouletteProps<T>, ref: React.ForwardedRef<
             {render ? render(item) : String(item)}
           </div>
         ))}
-        {items.map((item, index) => (
+        {items?.map((item, index) => (
           <div
             className="roulette-item"
             key={index}

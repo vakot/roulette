@@ -1,0 +1,6 @@
+.list :global(.ant-empty-normal) {
+  margin: 0;
+}
+.list :global(.ant-list-empty-text) {
+  padding: 1px;
+}

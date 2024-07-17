@@ -1,5 +1,7 @@
 import { countApi } from '@modules/api/count/count.api'
-import { playerApi } from '@modules/api/player/player.api'
+import { playerApi } from '@modules/api/player'
+import { rouletteApi } from '@modules/api/roulette'
+import { createSocketMiddleware } from '@modules/middleware/socket'
 import { configureStore } from '@reduxjs/toolkit'
 import playersReducer from './slices/players'
 import themeReducer from './slices/theme'
@@ -9,10 +11,14 @@ export const makeStore = () => {
     reducer: {
       players: playersReducer,
       theme: themeReducer,
+      [playerApi.reducerPath]: playerApi.reducer,
       [countApi.reducerPath]: countApi.reducer,
-      [playerApi.reducerPath]: playerApi.reducer
+      [rouletteApi.reducerPath]: rouletteApi.reducer
     },
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(countApi.middleware).concat(playerApi.middleware)
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware()
+        .concat(playerApi.middleware, countApi.middleware, rouletteApi.middleware)
+        .concat(createSocketMiddleware([playerApi, countApi, rouletteApi]))
   })
 }
 

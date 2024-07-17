@@ -3,13 +3,13 @@
 .main {
   display: flex;
   align-items: flex-start;
-  gap: 16px;
+  gap: 8px;
 }
 
 .block {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 8px;
 }
 
 .roulette-block {

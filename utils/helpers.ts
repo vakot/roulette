@@ -6,7 +6,7 @@
  * @param {number} exponent Exponent value for scaling probabilities (higher exponent gives higher chances to larger numbers).
  * @returns {number} A random index from the array, selected based on the calculated probabilities (fallback: -1).
  */
-export function getRandomIndexWithProbabilities(items: number[], exponent: number = 1.5): number {
+export function getRandomIndexWithProbabilities(items: number[] = [], exponent: number = 1.5): number {
   const probabilities = getProbabilities(items, exponent)
 
   // Generate a random number between 0 and 1
@@ -48,18 +48,38 @@ export function getProbabilities(items: number[], exponent: number = 1.5): numbe
 }
 
 /**
- * Generates a random color in HEX format.
+ * Generates a color in HEX format. If a seed is provided, generates a consistent color based on the seed.
  *
- * @returns {string} Random color in HEX format (e.g., '#RRGGBB').
+ * @param {string} [seed] Optional seed for generating a consistent color.
+ * @returns {string} Color in HEX format (e.g., '#RRGGBB').
  */
-export function getRandomColor(): string {
-  // Generate random RGB values
-  const r = Math.floor(Math.random() * 256) // Red component
-  const g = Math.floor(Math.random() * 256) // Green component
-  const b = Math.floor(Math.random() * 256) // Blue component
+export function getRandomColor(seed?: string): string {
+  if (!seed) {
+    // If no seed is provided, generate a random color
+    const r = Math.floor(Math.random() * 256) // Red component
+    const g = Math.floor(Math.random() * 256) // Green component
+    const b = Math.floor(Math.random() * 256) // Blue component
 
-  // Convert RGB to HEX format
-  return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`
+    // Convert RGB to HEX format
+    return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`
+  }
+
+  let hash = 0
+
+  // Generate hash from the string
+  for (let i = 0; i < seed.length; i++) {
+    hash = seed.charCodeAt(i) + ((hash << 8) - hash) // Adjusted bit shift for more differentiation
+  }
+
+  // Convert hash to color code in hex
+  let color = '#'
+
+  for (let i = 0; i < 3; i++) {
+    const value = (hash >> (i * 8)) & 0xff
+    color += ('00' + (value ^ (hash & 0xff)).toString(16)).slice(-2) // XOR operation for added complexity
+  }
+
+  return color
 }
 
 /**
@@ -88,7 +108,7 @@ export function toShuffled<T>(array: T[]): T[] {
  * @param {number} times The number of times to duplicate the array.
  * @returns {T[]} A new array containing the duplicated arrays.
  */
-export function duplicateArray<T>(array: T[], times: number = 1): T[] {
+export function duplicateArray<T>(array: T[] = [], times: number = 1): T[] {
   let result: T[] = []
 
   for (let i = 0; i < times; i++) {
@@ -147,4 +167,70 @@ export function getRandomName(
   }
 
   return name
+}
+
+/**
+ * Recursively removes all properties with `null` or `undefined` values from an object or array.
+ * Also removes empty objects and arrays.
+ *
+ * @param obj - The object or array to clean.
+ * @returns A new object or array with `null`, `undefined`, and empty values removed, or `null` if the input was falsy.
+ */
+export function toCleanObject<T = unknown>(obj: T): Partial<T> | null {
+  if (obj === undefined || obj === null) {
+    return null
+  }
+
+  if (Array.isArray(obj)) {
+    const cleanedArray = obj.map((item) => toCleanObject(item)).filter((item) => item !== undefined && item !== null)
+
+    return cleanedArray.length > 0 ? (cleanedArray as unknown as T) : null
+  }
+
+  if (typeof obj === 'object') {
+    const cleanedObject = Object.keys(obj).reduce((acc: Partial<T>, key) => {
+      const value = (obj as any)[key]
+
+      const cleanedValue = toCleanObject(value)
+
+      if (cleanedValue !== undefined && cleanedValue !== null) {
+        ;(acc as any)[key] = cleanedValue
+      }
+
+      return acc
+    }, {})
+
+    return Object.keys(cleanedObject).length > 0 ? cleanedObject : null
+  }
+
+  return obj
+}
+
+/**
+ * Transforms an object into a MongoDB update query with $set and $unset operators.
+ *
+ * @template T - The type of the object to transform.
+ * @param {T} obj - The object to transform into an update query.
+ * @returns {Object} The update query containing $set and $unset operators.
+ *
+ * @example
+ * const updateQuery = toUpdateQuery({ field1: 'value', field2: undefined });
+ * // updateQuery will be: { $set: { field1: 'value' }, $unset: { field2: '' } }
+ */
+export function toUpdateQuery<T>(obj: T): Record<string, any> {
+  const set: { [key: string]: any } = {}
+  const unset: { [key: string]: any } = {}
+
+  for (const key in obj) {
+    if (obj[key] === undefined || obj[key] === null) {
+      unset[key] = ''
+    } else {
+      set[key] = obj[key]
+    }
+  }
+
+  return {
+    ...(Object.keys(set).length && { $set: set }),
+    ...(Object.keys(unset).length && { $unset: unset })
+  }
 }

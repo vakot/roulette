@@ -2,36 +2,23 @@
 
 .main {
   display: flex;
-  align-items: flex-start;
   gap: 16px;
 }
 
-.block {
+.column {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
-.roulette-block {
+.column:nth-child(1) {
   flex: 0.7;
 }
-.players-block {
+.column:nth-child(2) {
   flex: 0.3;
 }
 
 /* CARDS */
-
-.winner,
-.bank {
-  font-size: 32px;
-}
-
-.players,
-.admin,
-.winner,
-.bank {
-  flex: 1;
-}
 
 .roulette {
   width: 100%;
@@ -48,7 +35,13 @@
   .main {
     flex-direction: column;
   }
-  .block {
+  .column {
     width: 100%;
+  }
+}
+
+@media (max-width: 1200px) {
+  .column {
+    flex: 1 !important;
   }
 }

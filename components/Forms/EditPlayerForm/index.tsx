@@ -1,8 +1,8 @@
-import { Player } from '@modules/hooks/usePlayers'
-import { getRandomColor } from '@utils/helpers'
-import { ColorPicker, Flex, Form, FormProps, Input } from 'antd'
+import { useEditPlayerMutation, usePlayerMutation, usePlayerQuery } from '@modules/api/player'
+import { IPlayer } from '@modules/models/Player'
+import { IRoulette } from '@modules/models/Roulette'
+import { Flex, Form, FormProps, Input } from 'antd'
 import { useCallback, useEffect } from 'react'
-import { v1 as uuidv1 } from 'uuid'
 
 export interface EditFormProps<T>
   extends Omit<FormProps, 'children' | 'layout' | 'onFinish' | 'onFinishFailed' | 'initialValues' | 'requiredMark'> {
@@ -10,22 +10,42 @@ export interface EditFormProps<T>
   onFinish?: (item: T) => void
 }
 
-export interface EditPlayerFormProps extends EditFormProps<Player> {
-  player?: Player
+export interface EditPlayerFormProps extends EditFormProps<IPlayer> {
+  player?: IPlayer['_id']
+  roulette?: IRoulette['_id']
 }
 
-export const EditPlayerForm: React.FC<EditPlayerFormProps> = ({ form: _form, onFinish, onFinishFailed, player, ...props }) => {
+export const EditPlayerForm: React.FC<EditPlayerFormProps> = ({
+  form: _form,
+  onFinish,
+  onFinishFailed,
+  player: playerId,
+  roulette: rouletteId,
+  ...props
+}) => {
   const [form] = Form.useForm(_form)
 
+  const { data: player } = usePlayerQuery(playerId, { skip: !playerId })
+  const [editPlayer] = useEditPlayerMutation()
+  const [addPlayer] = usePlayerMutation()
+
   const handleFinish = useCallback(
-    async (fields: Omit<Player, 'id'>) => {
+    async (fields: Omit<IPlayer, '_id'>) => {
       try {
-        onFinish?.({ ...fields, id: uuidv1(), color: fields.color || getRandomColor(), name: fields.name || 'anonim' })
+        const response = player ? await editPlayer({ ...player, ...fields }) : await addPlayer({ ...fields, roulette: rouletteId })
+
+        if (response.data) {
+          onFinish?.(response.data)
+        } else if (response.error) {
+          onFinishFailed?.(response.error)
+        } else {
+          onFinishFailed?.('unexpected result')
+        }
       } catch (error: any) {
         onFinishFailed?.(error)
       }
     },
-    [onFinish, onFinishFailed]
+    [onFinish, onFinishFailed, editPlayer, addPlayer, player, rouletteId]
   )
 
   useEffect(() => {
@@ -43,17 +63,17 @@ export const EditPlayerForm: React.FC<EditPlayerFormProps> = ({ form: _form, onF
           <Form.Item name="name" style={{ flex: 1 }}>
             <Input placeholder="Name" />
           </Form.Item>
-          <Form.Item name="color">
+          {/* <Form.Item name="color">
             <ColorPicker />
-          </Form.Item>
+          </Form.Item> */}
         </Flex>
       </Form.Item>
       <Form.Item label="Price" name="price" required>
         <Input type="number" placeholder="Price..." />
       </Form.Item>
-      <Form.Item label="Description" name="description">
+      {/* <Form.Item label="Description" name="description">
         <Input.TextArea rows={3} placeholder="Description (optional)..." />
-      </Form.Item>
+      </Form.Item> */}
     </Form>
   )
 }
