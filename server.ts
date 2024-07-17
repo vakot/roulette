@@ -3,10 +3,10 @@ import next from 'next'
 import { parse } from 'url'
 import { initializeSocket } from './modules/lib/websocket'
 
-const port = parseInt(process.env.PORT || '3000', 10)
+const port = parseInt(process.env.PORT ?? '3000', 10)
 const hostname = process.env.HOSTNAME ?? 'localhost'
 const dev = process.env.NODE_ENV !== 'production'
-const app = next({ dev })
+const app = next({ dev, hostname, port })
 const handle = app.getRequestHandler()
 
 app.prepare().then(() => {
