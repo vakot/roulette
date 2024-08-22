@@ -9,14 +9,14 @@ export const rouletteApi = createApi({
   tagTypes: ['Roulette', 'Target'],
   baseQuery: fetchBaseQuery({ baseUrl: `/api/` }),
   endpoints: (builder) => ({
-    roulette: builder.query<IRoulette, string>({
+    getRoulette: builder.query<IRoulette, string | undefined | null | void>({
       query: (id) => ({
         url: `roulette/${id}`,
         method: 'GET'
       }),
       providesTags: ['Roulette']
     }),
-    Roulette: builder.mutation<IRoulette, Partial<IRoulette>>({
+    addRoulette: builder.mutation<IRoulette, Partial<IRoulette>>({
       query: (body) => ({
         url: 'roulette',
         method: 'POST',
@@ -32,7 +32,7 @@ export const rouletteApi = createApi({
       }),
       invalidatesTags: () => invalidatesTags('rouletteApi', ['Roulette', 'Target']) as any
     }),
-    roulettes: builder.query<IRoulette[], void>({
+    getRoulettes: builder.query<IRoulette[], void>({
       query: (id) => ({
         url: 'roulette',
         method: 'GET',
@@ -40,7 +40,7 @@ export const rouletteApi = createApi({
       }),
       providesTags: ['Roulette']
     }),
-    Roulettes: builder.mutation<IRoulette[], Partial<IRoulette>[]>({
+    addRoulettes: builder.mutation<IRoulette[], Partial<IRoulette>[]>({
       query: (body) => ({
         url: 'roulette',
         method: 'POST',
@@ -51,4 +51,5 @@ export const rouletteApi = createApi({
   })
 })
 
-export const { useRouletteQuery, useRouletteMutation, useEditRouletteMutation, useRoulettesQuery, useRoulettesMutation } = rouletteApi
+export const { useGetRouletteQuery, useAddRouletteMutation, useEditRouletteMutation, useGetRoulettesQuery, useAddRoulettesMutation } =
+  rouletteApi

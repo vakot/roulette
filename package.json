@@ -15,6 +15,7 @@
     "@reduxjs/toolkit": "^2.2.6",
     "@types/uuid": "^10.0.0",
     "antd": "^5.19.1",
+    "axios": "^1.7.4",
     "classnames": "^2.5.1",
     "mongodb": "^6.8.0",
     "mongoose": "^8.5.0",
@@ -27,12 +28,14 @@
     "socket.io": "^4.7.5",
     "socket.io-client": "^4.7.5",
     "ts-node": "^10.9.2",
-    "uuid": "^10.0.0"
+    "uuid": "^10.0.0",
+    "ws": "^8.18.0"
   },
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/ws": "^8.5.12",
     "eslint": "^8",
     "eslint-config-next": "14.2.4",
     "nodemon": "^3.1.4",

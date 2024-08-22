@@ -1,3 +1,4 @@
+import { v1 as uuidv1 } from 'uuid'
 /**
  * Selects a random index from an array of numbers, with probabilities calculated using exponentiation.
  * Higher values have higher chances of being selected.
@@ -53,22 +54,12 @@ export function getProbabilities(items: number[], exponent: number = 1.5): numbe
  * @param {string} [seed] Optional seed for generating a consistent color.
  * @returns {string} Color in HEX format (e.g., '#RRGGBB').
  */
-export function getRandomColor(seed?: string): string {
-  if (!seed) {
-    // If no seed is provided, generate a random color
-    const r = Math.floor(Math.random() * 256) // Red component
-    const g = Math.floor(Math.random() * 256) // Green component
-    const b = Math.floor(Math.random() * 256) // Blue component
-
-    // Convert RGB to HEX format
-    return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`
-  }
-
+export function getRandomColor(seed: string = uuidv1()): string {
   let hash = 0
 
   // Generate hash from the string
   for (let i = 0; i < seed.length; i++) {
-    hash = seed.charCodeAt(i) + ((hash << 8) - hash) // Adjusted bit shift for more differentiation
+    hash = seed.charCodeAt(i) + ((hash << 5) - hash) // Adjusted bit shift for more differentiation
   }
 
   // Convert hash to color code in hex

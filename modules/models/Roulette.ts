@@ -3,7 +3,7 @@ import { IPlayer } from '@modules/models/Player'
 import mongoose from 'mongoose'
 
 export interface IRoulette {
-  _id: string
+  _id?: string
   winner?: IPlayer | null // TODO: move to api types
   target?: IPlayer | null // TODO: move to api types
 }
