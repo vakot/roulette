@@ -1,4 +1,4 @@
-import { useEditPlayerMutation, usePlayerMutation, usePlayerQuery } from '@modules/api/player'
+import { useAddPlayerMutation, useEditPlayerMutation, useGetPlayerQuery } from '@modules/api/player'
 import { IPlayer } from '@modules/models/Player'
 import { IRoulette } from '@modules/models/Roulette'
 import { Flex, Form, FormProps, Input } from 'antd'
@@ -25,9 +25,9 @@ export const EditPlayerForm: React.FC<EditPlayerFormProps> = ({
 }) => {
   const [form] = Form.useForm(_form)
 
-  const { data: player } = usePlayerQuery(playerId, { skip: !playerId })
+  const { data: player } = useGetPlayerQuery(playerId, { skip: !playerId })
   const [editPlayer] = useEditPlayerMutation()
-  const [addPlayer] = usePlayerMutation()
+  const [addPlayer] = useAddPlayerMutation()
 
   const handleFinish = useCallback(
     async (fields: Omit<IPlayer, '_id'>) => {

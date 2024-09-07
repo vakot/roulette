@@ -1,11 +1,12 @@
 'use client'
 
 import Icon from '@ant-design/icons'
-import { PlayersList } from '@components/Players/List'
+import { LastDonatorsCard } from '@components/Cards/LastDonatorsCard'
+import { PlayersList } from '@components/Lists/PlayersList'
 import { PlayersRoulette } from '@components/Players/Roulette'
 import Roulette from '@components/Roulette'
-import { usePlayersQuery } from '@modules/api/player'
-import { useEditRouletteMutation, useRouletteQuery } from '@modules/api/roulette'
+import { useEditPlayerMutation, useEditPlayersMutation, useGetPlayersQuery } from '@modules/api/player'
+import { useEditRouletteMutation, useGetRouletteQuery } from '@modules/api/roulette'
 import { IPlayer } from '@modules/models/Player'
 import CoinIcon from '@public/coin-thumb-up-01.svg'
 import { getRandomIndexWithProbabilities } from '@utils/helpers'
@@ -20,10 +21,13 @@ const RoulettePage: NextPage<{ params: { id: string } }> = (context) => {
 
   const rouletteRef = Roulette.useRoulette()
 
-  const { data: players } = usePlayersQuery({ roulette: rouletteId })
-  const { data: roulette } = useRouletteQuery(rouletteId)
+  const { data: players } = useGetPlayersQuery({ roulette: rouletteId })
+  const { data: lastDonators } = useGetPlayersQuery({ roulette: 'none' })
+  const { data: roulette } = useGetRouletteQuery(rouletteId)
 
   const [editRoulette] = useEditRouletteMutation()
+  const [editPlayer] = useEditPlayerMutation()
+  const [editPlayers] = useEditPlayersMutation()
 
   const bank = useMemo<number>(() => {
     return (
@@ -63,6 +67,19 @@ const RoulettePage: NextPage<{ params: { id: string } }> = (context) => {
     rouletteRef.current?.spin(index)
   }, [rouletteRef, roulette, players])
 
+  const handleRegister = useCallback(
+    (donator: IPlayer) => {
+      editPlayer({ ...donator, roulette: roulette?._id })
+    },
+    [editPlayer, roulette]
+  )
+
+  const handleRegisterAll = useCallback(() => {
+    if (lastDonators?.length) {
+      editPlayers(lastDonators.map((player) => ({ ...player, roulette: roulette?._id })))
+    }
+  }, [lastDonators, editPlayers, roulette])
+
   return (
     <main className={styles.main}>
       <div className={styles.column}>
@@ -82,6 +99,7 @@ const RoulettePage: NextPage<{ params: { id: string } }> = (context) => {
         <Button size="large" type="primary" block onClick={handleSpin}>
           Spin
         </Button>
+        <LastDonatorsCard editable roulette={roulette?._id} />
       </div>
       <div className={styles.column}>
         <Card title={`Players - ${players?.length ?? 0}`}>

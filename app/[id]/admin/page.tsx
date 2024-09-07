@@ -3,13 +3,13 @@
 import Icon from '@ant-design/icons/lib/components/Icon'
 import { AdminCard } from '@components/Admin/AdminCard'
 import { EditPlayerForm } from '@components/Forms/EditPlayerForm'
-import { PlayersList } from '@components/Players/List'
-import { usePlayersQuery } from '@modules/api/player'
-import { useEditRouletteMutation, useRouletteQuery } from '@modules/api/roulette'
+import { PlayersList, PlayersListItemMeta } from '@components/Lists/PlayersList'
+import { useEditPlayerMutation, useEditPlayersMutation, useGetPlayersQuery } from '@modules/api/player'
+import { useEditRouletteMutation, useGetRouletteQuery } from '@modules/api/roulette'
 import { useProbabilities } from '@modules/hooks/useProbabilities'
 import { IPlayer } from '@modules/models/Player'
 import CoinIcon from '@public/coin-thumb-up-01.svg'
-import { Button, Flex, Form } from 'antd'
+import { Button, Flex, Form, List, Space } from 'antd'
 import Image from 'next/image'
 import { useCallback, useMemo } from 'react'
 import styles from './page.module.css'
@@ -19,10 +19,13 @@ export default function AdminPage({ params }: { params: { id: string } }) {
 
   const [addPlayerForm] = Form.useForm()
 
-  const { data: roulette } = useRouletteQuery(rouletteId)
-  const { data: players } = usePlayersQuery({ roulette: rouletteId })
+  const { data: players } = useGetPlayersQuery({ roulette: rouletteId })
+  const { data: lastDonators } = useGetPlayersQuery({ roulette: 'none' })
+  const { data: roulette } = useGetRouletteQuery(rouletteId)
 
   const [editRoulette] = useEditRouletteMutation()
+  const [editPlayer] = useEditPlayerMutation()
+  const [editPlayers] = useEditPlayersMutation()
 
   const bank = useMemo<number>(() => {
     return (
@@ -40,6 +43,19 @@ export default function AdminPage({ params }: { params: { id: string } }) {
     },
     [roulette, editRoulette]
   )
+
+  const handleRegister = useCallback(
+    (donator: IPlayer) => {
+      editPlayer({ ...donator, roulette: roulette?._id })
+    },
+    [editPlayer, roulette]
+  )
+
+  const handleRegisterAll = useCallback(() => {
+    if (lastDonators?.length) {
+      editPlayers(lastDonators.map((player) => ({ ...player, roulette: roulette?._id })))
+    }
+  }, [lastDonators, editPlayers, roulette])
 
   return (
     <main className={styles.main}>
@@ -65,6 +81,28 @@ export default function AdminPage({ params }: { params: { id: string } }) {
               Add
             </Button>
           </Flex>
+        </AdminCard>
+        <AdminCard
+          title={
+            <Space>
+              <span>Last donators</span>
+              <Button type="primary" onClick={handleRegisterAll}>
+                Register all
+              </Button>
+            </Space>
+          }>
+          <List
+            itemLayout="horizontal"
+            dataSource={lastDonators}
+            renderItem={(item) => (
+              <List.Item>
+                <PlayersListItemMeta player={item} />
+                <Button type="primary" onClick={() => handleRegister(item)}>
+                  Register
+                </Button>
+              </List.Item>
+            )}
+          />
         </AdminCard>
       </div>
       <div className={styles.column}>
