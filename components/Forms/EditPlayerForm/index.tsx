@@ -71,9 +71,9 @@ export const EditPlayerForm: React.FC<EditPlayerFormProps> = ({
       <Form.Item label="Price" name="price" required>
         <Input type="number" placeholder="Price..." />
       </Form.Item>
-      {/* <Form.Item label="Description" name="description">
+      <Form.Item label="Description" name="description">
         <Input.TextArea rows={3} placeholder="Description (optional)..." />
-      </Form.Item> */}
+      </Form.Item>
     </Form>
   )
 }

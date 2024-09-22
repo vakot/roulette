@@ -28,44 +28,27 @@ export const EditPlayerModal: React.FC<EditPlayerModalProps> = ({
   ...props
 }) => {
   const [form] = Form.useForm()
-  // const [changed, setChanged] = useState<boolean>(false)
 
   const handleOk = useCallback(() => {
     form.submit()
   }, [form])
 
   const handleCancel = useCallback(() => {
-    console.log('handleCancel')
-
     form.resetFields()
-    // setChanged(false)
     onCancel?.()
   }, [form, onCancel])
 
   const handleFinish = useCallback(
     (player: IPlayer) => {
-      console.log('handleFinish')
-
       onFinish?.(player)
-      // setChanged(false)
       onOk?.()
     },
     [onOk, onFinish]
   )
 
-  // const handleChange = useCallback(() => {
-  //   setChanged(true)
-  // }, [])
-
   return (
     <Modal onOk={handleOk} onCancel={handleCancel} destroyOnClose={destroyOnClose} title="Edit player modal" {...props}>
-      <EditPlayerForm
-        form={form}
-        player={player}
-        roulette={rouletteId}
-        // onChange={handleChange}
-        onFinish={handleFinish}
-      />
+      <EditPlayerForm form={form} player={player} roulette={rouletteId} onFinish={handleFinish} />
     </Modal>
   )
 }

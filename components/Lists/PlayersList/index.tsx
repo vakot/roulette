@@ -1,8 +1,9 @@
-import Icon, { DeleteFilled, QuestionCircleOutlined } from '@ant-design/icons'
-import { EditPlayerButton } from '@components/Buttons/EditPlayerButton'
+import Icon, { QuestionCircleOutlined } from '@ant-design/icons'
 import { PlayerAvatar } from '@components/Players/Avatar'
 import { PlayerFilters } from '@components/Players/Filters'
-import { useDeletePlayerMutation, useDeletePlayersMutation } from '@modules/api/player'
+import { EditPlayerPopover } from '@components/Popovers/EditPlayerPopover'
+import { useDeletePlayersMutation } from '@modules/api/player'
+import { useDevice } from '@modules/hooks/useDevice'
 import { IPlayer } from '@modules/models/Player'
 import CoinIcon from '@public/coin-thumb-up-01.svg'
 import { Button, List, Popconfirm, Space, Typography } from 'antd'
@@ -62,32 +63,30 @@ export interface PlayersListItemProps {
 }
 
 export const PlayersListItem: React.FC<PlayersListItemProps> = ({ player, editable = false, onClick }) => {
-  const [deletePlayer] = useDeletePlayerMutation()
+  const { isMobile } = useDevice()
 
-  const handleDelete = useCallback(() => {
-    deletePlayer(player._id)
-  }, [player, deletePlayer])
+  if (isMobile) {
+    return editable ? (
+      <EditPlayerPopover player={player._id}>
+        <List.Item onClick={() => onClick?.(player)}>
+          <PlayersListItemMeta player={player} />
+        </List.Item>
+      </EditPlayerPopover>
+    ) : (
+      <List.Item onClick={() => onClick?.(player)}>
+        <PlayersListItemMeta player={player} />
+      </List.Item>
+    )
+  }
 
   return (
-    <List.Item>
+    <List.Item onClick={() => onClick?.(player)}>
       <PlayersListItemMeta player={player} />
-      <Space>
-        {editable && (
-          <Button type="primary" size="large" onClick={() => onClick?.(player)}>
-            Make Winner
-          </Button>
-        )}
-        {editable && <EditPlayerButton size="large" player={player._id} />}
-        {editable && (
-          <Popconfirm
-            title="Delete player"
-            description="Are you sure to delete this player?"
-            icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
-            onConfirm={handleDelete}>
-            <Button size="large" type="primary" danger icon={<DeleteFilled />} />
-          </Popconfirm>
-        )}
-      </Space>
+      {editable && (
+        <EditPlayerPopover player={player._id}>
+          <Button type="primary">Edit</Button>
+        </EditPlayerPopover>
+      )}
     </List.Item>
   )
 }
@@ -99,6 +98,7 @@ export interface PlayersListItemMetaProps {
 export const PlayersListItemMeta: React.FC<PlayersListItemMetaProps> = ({ player }) => {
   return (
     <List.Item.Meta
+      style={{ minWidth: 300 }}
       avatar={<PlayerAvatar player={player} />}
       title={
         <Space>

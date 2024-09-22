@@ -2,7 +2,7 @@
 
 import { QuestionCircleOutlined } from '@ant-design/icons'
 import { EditPlayerButton } from '@components/Buttons/EditPlayerButton'
-import { PlayersList } from '@components/Players/List'
+import { PlayersList } from '@components/Lists/PlayersList'
 import { useAddPlayersMutation, useDeletePlayersMutation, useGetPlayersQuery } from '@modules/api/player'
 import { usePlayers } from '@modules/hooks/usePlayers'
 import { Button, Popconfirm, Space } from 'antd'

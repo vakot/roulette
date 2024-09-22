@@ -111,7 +111,6 @@ export default function AdminPage({ params }: { params: { id: string } }) {
             showFilters
             editable
             players={players?.map((player, index) => ({ ...player, probability: probabilities[index].value }))}
-            onClick={handleTargetSelect}
           />
         </AdminCard>
       </div>
