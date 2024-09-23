@@ -2,7 +2,7 @@ import { IPlayer } from '@modules/models/Player'
 import { IRoulette } from '@modules/models/Roulette'
 import { invalidatesTags } from '@modules/store/utils/invalidatesTags'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { toCleanObject } from '@utils/helpers'
+import { toArray, toCleanObject } from '@utils/helpers'
 
 export const playerApi = createApi({
   reducerPath: 'playerApi',
@@ -22,7 +22,7 @@ export const playerApi = createApi({
       query: (body) => ({
         url: 'player',
         method: 'POST',
-        body: { players: [body] }
+        body: toArray(body)
       }),
       invalidatesTags: () => invalidatesTags('playerApi', ['Player', 'Roulette'])
     }),

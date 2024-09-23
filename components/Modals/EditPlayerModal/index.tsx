@@ -1,14 +1,9 @@
 import { EditPlayerForm } from '@components/Forms/EditPlayerForm'
-import { IPlayer } from '@modules/models/Player'
-import { IRoulette } from '@modules/models/Roulette'
-import { Form, Modal, ModalProps } from 'antd'
+import type { EditModalProps } from '@components/Modals/types'
+import type { IPlayer } from '@modules/models/Player'
+import type { IRoulette } from '@modules/models/Roulette'
+import { Form, Modal } from 'antd'
 import { useCallback } from 'react'
-
-export interface EditModalProps<T = unknown> extends Omit<ModalProps, 'onOk' | 'onCancel'> {
-  onOk?: () => void
-  onCancel?: () => void
-  onFinish?: (player: T) => void
-}
 
 export interface EditPlayerModalProps extends EditModalProps<IPlayer> {
   player?: IPlayer['_id']

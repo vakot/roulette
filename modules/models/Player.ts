@@ -17,7 +17,7 @@ export type PlayerModelType = Omit<IPlayer, '_id'> & IDocument
 export const PlayerSchema = new mongoose.Schema<PlayerModelType>({
   roulette: { type: mongoose.Schema.Types.ObjectId, required: false, ref: 'Roulette' },
   color: { type: String, required: false, default: getRandomColor },
-  name: { type: String, required: false, default: 'anonim' },
+  name: { type: String, required: false, default: 'anonym' },
   price: { type: Number, required: true, default: 0 },
   avatar: {
     type: String,

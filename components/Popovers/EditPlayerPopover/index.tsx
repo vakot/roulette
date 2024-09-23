@@ -1,18 +1,17 @@
 import { QuestionCircleOutlined } from '@ant-design/icons'
+import type { EditPopoverProps } from '@components/Popovers/types'
 import { useDeletePlayerMutation, useEditPlayerMutation, useGetPlayerQuery } from '@modules/api/player'
 import { useEditRouletteMutation } from '@modules/api/roulette'
 import { useAdminPathname } from '@modules/hooks/useAdminPathname'
-import { IPlayer } from '@modules/models/Player'
-import { Button, Popconfirm, Popover, PopoverProps, Space } from 'antd'
+import type { IPlayer } from '@modules/models/Player'
+import { Button, Popconfirm, Popover, Space } from 'antd'
 import { useCallback } from 'react'
-
-export interface EditPopoverProps<T = unknown> extends Omit<PopoverProps, 'content'> {}
 
 export interface EditPlayerPopoverProps extends EditPopoverProps<IPlayer> {
   player?: IPlayer['_id']
 }
 
-export const EditPlayerPopover: React.FC<EditPlayerPopoverProps> = ({ player: playerId, ...rest }) => {
+export const EditPlayerPopover: React.FC<EditPlayerPopoverProps> = ({ player: playerId, ...props }) => {
   const { data: player } = useGetPlayerQuery(playerId, { skip: !playerId })
 
   const [editPlayer] = useEditPlayerMutation()
@@ -64,7 +63,7 @@ export const EditPlayerPopover: React.FC<EditPlayerPopoverProps> = ({ player: pl
           </Space>
         )
       }
-      {...rest}
+      {...props}
     />
   )
 }

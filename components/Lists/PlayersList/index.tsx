@@ -1,7 +1,8 @@
 import Icon, { QuestionCircleOutlined } from '@ant-design/icons'
+import { EditPlayerButton } from '@components/Buttons/EditPlayerButton'
+import { EditPlayerModal } from '@components/Modals/EditPlayerModal'
 import { PlayerAvatar } from '@components/Players/Avatar'
 import { PlayerFilters } from '@components/Players/Filters'
-import { EditPlayerPopover } from '@components/Popovers/EditPlayerPopover'
 import { useDeletePlayersMutation } from '@modules/api/player'
 import { useDevice } from '@modules/hooks/useDevice'
 import { IPlayer } from '@modules/models/Player'
@@ -63,31 +64,30 @@ export interface PlayersListItemProps {
 }
 
 export const PlayersListItem: React.FC<PlayersListItemProps> = ({ player, editable = false, onClick }) => {
+  const [open, setOpen] = useState<boolean>(false)
+
   const { isMobile } = useDevice()
 
-  if (isMobile) {
-    return editable ? (
-      <EditPlayerPopover player={player._id}>
-        <List.Item onClick={() => onClick?.(player)}>
-          <PlayersListItemMeta player={player} />
-        </List.Item>
-      </EditPlayerPopover>
-    ) : (
-      <List.Item onClick={() => onClick?.(player)}>
-        <PlayersListItemMeta player={player} />
-      </List.Item>
-    )
-  }
+  const handleClick = useCallback(() => {
+    onClick?.(player)
+    if (isMobile) {
+      setOpen(true)
+    }
+  }, [player, isMobile, onClick])
 
   return (
-    <List.Item onClick={() => onClick?.(player)}>
-      <PlayersListItemMeta player={player} />
-      {editable && (
-        <EditPlayerPopover player={player._id}>
-          <Button type="primary">Edit</Button>
-        </EditPlayerPopover>
-      )}
-    </List.Item>
+    <>
+      <List.Item onClick={handleClick}>
+        <PlayersListItemMeta player={player} />
+        {editable && !isMobile && (
+          <EditPlayerButton player={player?._id} type="primary">
+            Edit
+          </EditPlayerButton>
+        )}
+      </List.Item>
+
+      <EditPlayerModal open={open} player={player?._id} onOk={() => setOpen(false)} onCancel={() => setOpen(false)} />
+    </>
   )
 }
 

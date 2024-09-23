@@ -1,9 +1,8 @@
-import { PlayersListItemMeta } from '@components/Lists/PlayersList'
-import { useEditPlayerMutation, useEditPlayersMutation, useGetPlayersQuery } from '@modules/api/player'
+import { LastDonatorsList } from '@components/Lists/LastDonatorsList'
+import { useEditPlayersMutation, useGetPlayersQuery } from '@modules/api/player'
 import { useGetRouletteQuery } from '@modules/api/roulette'
-import { IPlayer } from '@modules/models/Player'
 import { IRoulette } from '@modules/models/Roulette'
-import { Button, Card, CardProps, Flex, List } from 'antd'
+import { Button, Card, CardProps, Flex } from 'antd'
 import { useCallback } from 'react'
 
 export interface LastDonatorsCardProps extends CardProps {
@@ -15,15 +14,7 @@ export const LastDonatorsCard: React.FC<LastDonatorsCardProps> = ({ roulette: ro
   const { data: lastDonators } = useGetPlayersQuery({ roulette: 'none' })
   const { data: roulette } = useGetRouletteQuery(rouletteId, { skip: !rouletteId })
 
-  const [editPlayer] = useEditPlayerMutation()
   const [editPlayers] = useEditPlayersMutation()
-
-  const handleRegister = useCallback(
-    (donator: IPlayer) => {
-      editPlayer({ ...donator, roulette: roulette?._id })
-    },
-    [editPlayer, roulette]
-  )
 
   const handleRegisterAll = useCallback(() => {
     if (lastDonators?.length) {
@@ -43,20 +34,7 @@ export const LastDonatorsCard: React.FC<LastDonatorsCardProps> = ({ roulette: ro
           )}
         </Flex>
       }>
-      <List
-        itemLayout="horizontal"
-        dataSource={lastDonators}
-        renderItem={(player) => (
-          <List.Item>
-            <PlayersListItemMeta player={player} />
-            {editable && (
-              <Button type="primary" onClick={() => handleRegister(player)}>
-                Register
-              </Button>
-            )}
-          </List.Item>
-        )}
-      />
+      <LastDonatorsList roulette={rouletteId} editable={editable} />
     </Card>
   )
 }

@@ -1,5 +1,5 @@
 import { FilterOutlined, SortAscendingOutlined, SortDescendingOutlined } from '@ant-design/icons'
-import { PlayerWithProbability } from '@components/Players/List'
+import { PlayerWithProbability } from '@components/Lists/PlayersList'
 import { Button, Flex, Form, Input, Select, Slider, Space } from 'antd'
 import { useEffect, useMemo } from 'react'
 

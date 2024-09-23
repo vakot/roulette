@@ -7,7 +7,7 @@ export interface PlayersRouletteProps extends Omit<RouletteProps<IPlayer>, 'rend
   players: RouletteProps<IPlayer>['items']
 }
 
-export const PlayersRoulette: React.FC<PlayersRouletteProps> = ({ players = [], ...rest }) => {
+export const PlayersRoulette: React.FC<PlayersRouletteProps> = ({ players = [], ...props }) => {
   return (
     <Roulette
       items={players}
@@ -26,7 +26,7 @@ export const PlayersRoulette: React.FC<PlayersRouletteProps> = ({ players = [], 
       )}
       duration={10000}
       fakes={10}
-      {...rest}
+      {...props}
     />
   )
 }

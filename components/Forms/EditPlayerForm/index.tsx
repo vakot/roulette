@@ -1,14 +1,12 @@
+import { PlayerControlsCard } from '@components/Admin/Cards/PlayerControls'
+import type { EditFormProps } from '@components/Forms/types'
+import { RouletteSelector } from '@components/Selectors/RouletteSelector'
 import { useAddPlayerMutation, useEditPlayerMutation, useGetPlayerQuery } from '@modules/api/player'
-import { IPlayer } from '@modules/models/Player'
-import { IRoulette } from '@modules/models/Roulette'
-import { Flex, Form, FormProps, Input } from 'antd'
+import { useAdminPathname } from '@modules/hooks/useAdminPathname'
+import type { IPlayer } from '@modules/models/Player'
+import type { IRoulette } from '@modules/models/Roulette'
+import { Flex, Form, Input } from 'antd'
 import { useCallback, useEffect } from 'react'
-
-export interface EditFormProps<T>
-  extends Omit<FormProps, 'children' | 'layout' | 'onFinish' | 'onFinishFailed' | 'initialValues' | 'requiredMark'> {
-  onFinishFailed?: (error: any) => void
-  onFinish?: (item: T) => void
-}
 
 export interface EditPlayerFormProps extends EditFormProps<IPlayer> {
   player?: IPlayer['_id']
@@ -29,10 +27,14 @@ export const EditPlayerForm: React.FC<EditPlayerFormProps> = ({
   const [editPlayer] = useEditPlayerMutation()
   const [addPlayer] = useAddPlayerMutation()
 
+  const isAdminPage = useAdminPathname()
+
   const handleFinish = useCallback(
     async (fields: Omit<IPlayer, '_id'>) => {
+      console.log(fields)
+
       try {
-        const response = player ? await editPlayer({ ...player, ...fields }) : await addPlayer({ ...fields, roulette: rouletteId })
+        const response = player ? await editPlayer({ ...player, ...fields }) : await addPlayer(fields)
 
         if (response.data) {
           onFinish?.(response.data)
@@ -45,25 +47,32 @@ export const EditPlayerForm: React.FC<EditPlayerFormProps> = ({
         onFinishFailed?.(error)
       }
     },
-    [onFinish, onFinishFailed, editPlayer, addPlayer, player, rouletteId]
+    [onFinish, onFinishFailed, editPlayer, addPlayer, player]
   )
 
   useEffect(() => {
     if (player) {
-      form.setFieldsValue(player)
+      form.setFieldsValue({ ...player, roulette: player.roulette?._id })
     } else {
       form.resetFields()
     }
-  }, [form, player])
+  }, [form, player, rouletteId])
 
   return (
-    <Form onFinish={handleFinish} form={form} layout="vertical" {...props}>
-      <Form.Item label="Name" style={{ margin: 0 }}>
+    <Form
+      onFinish={handleFinish}
+      form={form}
+      layout="vertical"
+      initialValues={{
+        roulette: rouletteId
+      }}
+      {...props}>
+      <Form.Item label="Name">
         <Flex gap={8}>
-          <Form.Item name="name" style={{ flex: 1 }}>
+          <Form.Item name="name" style={{ flex: 1, margin: 0 }}>
             <Input placeholder="Name" />
           </Form.Item>
-          {/* <Form.Item name="color">
+          {/* <Form.Item name="color" style={{ margin: 0 }}>
             <ColorPicker />
           </Form.Item> */}
         </Flex>
@@ -71,9 +80,25 @@ export const EditPlayerForm: React.FC<EditPlayerFormProps> = ({
       <Form.Item label="Price" name="price" required>
         <Input type="number" placeholder="Price..." />
       </Form.Item>
-      <Form.Item label="Description" name="description">
-        <Input.TextArea rows={3} placeholder="Description (optional)..." />
+      <Form.Item label="Message" name="message">
+        <Input.TextArea rows={3} placeholder="Message... (optional)" />
       </Form.Item>
+      <Form.Item label="Roulette" name="roulette">
+        <RouletteSelector disabled={!!rouletteId} />
+      </Form.Item>
+      {isAdminPage && <EditPlayerFormControlsItem form={form} player={playerId} />}
     </Form>
+  )
+}
+
+const EditPlayerFormControlsItem: React.FC<EditPlayerFormProps> = ({ form: _form, player: playerId }) => {
+  const [form] = Form.useForm(_form)
+
+  const rouletteId = Form.useWatch('roulette', form)
+
+  return (
+    <Form.Item>
+      <PlayerControlsCard size="small" player={playerId} roulette={rouletteId} />
+    </Form.Item>
   )
 }
