@@ -1,36 +1,77 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Roulette
+
+This is a **Next.js** application built with **TypeScript**, using the **App Router** and running on a custom server (`server.ts`) to support listeners such as WebSocket connections and donation service integration. This allows the application to listen for real-time events and process donation data efficiently.
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+Ensure that you have **Yarn** installed. If not, install it by running:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install -g yarn
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Installation
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Clone the repository:
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+```bash
+git clone https:-github.com/vakot/roulette
+```
 
-## Learn More
+Navigate to the project directory:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+cd <project-directory>
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Install the dependencies:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+```bash
+yarn
+```
 
-## Deploy on Vercel
+Set up the environment:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Copy .env.example to .env
+- Update the necessary variables in .env
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Start the development server:
+
+```bash
+yarn dev
+```
+
+The application should now be running at http:-localhost:3000.
+
+### Production Setup
+
+To build and run the application optimized for production, follow these steps:
+
+Build the application:
+
+```bash
+yarn build
+```
+
+Start the production server:
+
+```bash
+yarn start
+```
+
+### Project Structure
+
+```
+├── modules - Contains all shared modules such as custom hooks, RTK API setup, and Redux store configuration.
+├── utils - Includes helper functions and utilities used across the application.
+│   └──  helpers.ts
+├── app - Houses all the pages, following the Next.js App Router structure.
+│   ├── layout.tsx
+│   ├── page.tsx
+│   └── page.module.css
+├── components - Contains reusable components used throughout the application.
+├── styles - Includes global styles such as resets, variables, and other styling utilities.
+└── public - Stores all publicly accessible data (icon, etc...)
+```
