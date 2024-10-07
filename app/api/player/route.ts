@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from 'next/server'
 
 dbConnect()
 
-export async function GET(request: NextRequest, { params }: { params: any }) {
+export async function GET(request: NextRequest) {
   try {
     const {
       nextUrl: { searchParams }
@@ -15,11 +15,13 @@ export async function GET(request: NextRequest, { params }: { params: any }) {
 
     const filters: FilterQuery<typeof Player> = {}
 
-    if (rouletteId) {
+    if (rouletteId === 'none') {
+      filters.roulette = { $exists: false }
+    } else if (rouletteId) {
       filters.roulette = rouletteId
     }
 
-    const players = await Player.find(filters).populate('roulette')
+    const players = await Player.find(filters).sort({ createdAt: -1 }).populate('roulette')
 
     return NextResponse.json(players, { status: 200 })
   } catch (error) {
@@ -31,9 +33,30 @@ export async function GET(request: NextRequest, { params }: { params: any }) {
 
 export async function POST(request: NextRequest) {
   try {
-    const body: { players: IPlayer[] } = await request.json()
+    const body: IPlayer[] = await request.json()
 
-    await Player.insertMany(body.players)
+    await Player.insertMany(body)
+
+    return NextResponse.json(null, { status: 200 })
+  } catch (error) {
+    console.error(error)
+
+    return NextResponse.json({ error }, { status: 500 })
+  }
+}
+
+export async function PATCH(request: NextRequest) {
+  try {
+    const body: IPlayer[] = await request.json()
+
+    await Player.bulkWrite(
+      body.map((player) => ({
+        updateOne: {
+          filter: { _id: player._id },
+          update: { $set: player }
+        }
+      }))
+    )
 
     return NextResponse.json(null, { status: 200 })
   } catch (error) {
@@ -45,9 +68,9 @@ export async function POST(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   try {
-    const body: { players: IPlayer['_id'][] } = await request.json()
+    const body: IPlayer['_id'][] = await request.json()
 
-    const deletedPlayers = await Player.deleteMany({ _id: { $in: body.players } })
+    const deletedPlayers = await Player.deleteMany({ _id: { $in: body } })
 
     if (!deletedPlayers) {
       return NextResponse.json({ error: 'not found' }, { status: 404 })

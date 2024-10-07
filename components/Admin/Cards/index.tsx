@@ -1,7 +1,7 @@
 'use client'
 
 import { Card, CardProps, Space } from 'antd'
-import { AdminOnly } from '../AdminOnly'
+import { AdminOnly } from '../../Badges/AdminOnly'
 
 export interface AdminCardProps extends CardProps {
   hideBadge?: boolean

@@ -1,4 +1,5 @@
 import { Server } from 'socket.io'
+import { initializeSocket as initializeStreamElementSocket } from './stream-element'
 
 let _global = global as typeof globalThis & { io: Server }
 
@@ -16,6 +17,8 @@ export const initializeSocket = (server: any) => {
     socket.on('disconnect', () => {
       console.log('🔴 User disconnected', socket.id)
     })
+
+    initializeStreamElementSocket(_global.io)
   })
 
   return _global.io

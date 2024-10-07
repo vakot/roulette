@@ -14,7 +14,6 @@ export const usePlayers = (): {
     return Array.from({ length }).map(() => ({
       name: getRandomName(),
       price: Math.random() * (1000 - 100) + 100
-      // image: `https://api.dicebear.com/7.x/miniavs/svg?seed=${uuidv1()}`
     }))
   }, [])
 

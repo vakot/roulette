@@ -1,4 +1,3 @@
-import { countApi } from '@modules/api/count/count.api'
 import { playerApi } from '@modules/api/player'
 import { rouletteApi } from '@modules/api/roulette'
 import { createSocketMiddleware } from '@modules/middleware/socket'
@@ -12,13 +11,12 @@ export const makeStore = () => {
       players: playersReducer,
       theme: themeReducer,
       [playerApi.reducerPath]: playerApi.reducer,
-      [countApi.reducerPath]: countApi.reducer,
       [rouletteApi.reducerPath]: rouletteApi.reducer
     },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware()
-        .concat(playerApi.middleware, countApi.middleware, rouletteApi.middleware)
-        .concat(createSocketMiddleware([playerApi, countApi, rouletteApi]))
+        .concat(playerApi.middleware, rouletteApi.middleware)
+        .concat(createSocketMiddleware([playerApi, rouletteApi]))
   })
 }
 
