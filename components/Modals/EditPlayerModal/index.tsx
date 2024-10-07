@@ -4,6 +4,7 @@ import type { IPlayer } from '@modules/models/Player'
 import type { IRoulette } from '@modules/models/Roulette'
 import { Form, Modal } from 'antd'
 import { useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
 
 export interface EditPlayerModalProps extends EditModalProps<IPlayer> {
   player?: IPlayer['_id']
@@ -24,6 +25,8 @@ export const EditPlayerModal: React.FC<EditPlayerModalProps> = ({
 }) => {
   const [form] = Form.useForm()
 
+  const { t } = useTranslation()
+
   const handleOk = useCallback(() => {
     form.submit()
   }, [form])
@@ -42,7 +45,14 @@ export const EditPlayerModal: React.FC<EditPlayerModalProps> = ({
   )
 
   return (
-    <Modal onOk={handleOk} onCancel={handleCancel} destroyOnClose={destroyOnClose} title="Edit player modal" {...props}>
+    <Modal
+      onOk={handleOk}
+      onCancel={handleCancel}
+      cancelText={t('Cancel')}
+      destroyOnClose={destroyOnClose}
+      title={t('Edit player modal')}
+      {...props}
+    >
       <EditPlayerForm form={form} player={player} roulette={rouletteId} onFinish={handleFinish} />
     </Modal>
   )

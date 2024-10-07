@@ -7,6 +7,7 @@ import type { IPlayer } from '@modules/models/Player'
 import type { IRoulette } from '@modules/models/Roulette'
 import { Flex, Form, Input } from 'antd'
 import { useCallback, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 
 export interface EditPlayerFormProps extends EditFormProps<IPlayer> {
   player?: IPlayer['_id']
@@ -26,6 +27,8 @@ export const EditPlayerForm: React.FC<EditPlayerFormProps> = ({
   const { data: player } = useGetPlayerQuery(playerId, { skip: !playerId })
   const [editPlayer] = useEditPlayerMutation()
   const [addPlayer] = useAddPlayerMutation()
+
+  const { t } = useTranslation()
 
   const isAdminPage = useAdminPathname()
 
@@ -64,26 +67,27 @@ export const EditPlayerForm: React.FC<EditPlayerFormProps> = ({
       form={form}
       layout="vertical"
       initialValues={{
-        roulette: rouletteId
+        roulette: rouletteId,
       }}
-      {...props}>
-      <Form.Item label="Name">
+      {...props}
+    >
+      <Form.Item label={t('Name')}>
         <Flex gap={8}>
           <Form.Item name="name" style={{ flex: 1, margin: 0 }}>
-            <Input placeholder="Name" />
+            <Input placeholder={t('Name')} />
           </Form.Item>
           {/* <Form.Item name="color" style={{ margin: 0 }}>
             <ColorPicker />
           </Form.Item> */}
         </Flex>
       </Form.Item>
-      <Form.Item label="Price" name="price" required>
-        <Input type="number" placeholder="Price..." />
+      <Form.Item label={t('Price')} name="price" required>
+        <Input type="number" placeholder={t('Price')} />
       </Form.Item>
-      <Form.Item label="Message" name="message">
-        <Input.TextArea rows={3} placeholder="Message... (optional)" />
+      <Form.Item label={t('Message')} name="message">
+        <Input.TextArea rows={3} placeholder={t('Message-Optional')} />
       </Form.Item>
-      <Form.Item label="Roulette" name="roulette">
+      <Form.Item label={t('Roulette')} name="roulette">
         <RouletteSelector disabled={!!rouletteId} />
       </Form.Item>
       {isAdminPage && <EditPlayerFormControlsItem form={form} player={playerId} />}
