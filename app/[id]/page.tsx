@@ -14,6 +14,7 @@ import { Button, Card, Empty } from 'antd'
 import { NextPage } from 'next'
 import Image from 'next/image'
 import { useCallback, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import styles from './page.module.css'
 
 const RoulettePage: NextPage<{ params: { id: string } }> = (context) => {
@@ -28,6 +29,8 @@ const RoulettePage: NextPage<{ params: { id: string } }> = (context) => {
   const [editRoulette] = useEditRouletteMutation()
   const [editPlayer] = useEditPlayerMutation()
   const [editPlayers] = useEditPlayersMutation()
+
+  const { t } = useTranslation()
 
   const bank = useMemo<number>(() => {
     return (
@@ -83,26 +86,33 @@ const RoulettePage: NextPage<{ params: { id: string } }> = (context) => {
   return (
     <main className={styles.main}>
       <div className={styles.column}>
-        <Card title="Last winner">
+        <Card title={t('last-winner')}>
           {!!roulette?.winner ? (
-            <PlayersList players={[{ ...roulette.winner, price: Number((bank * 0.9).toFixed(2)), probability: undefined }]} />
+            <PlayersList
+              players={[{ ...roulette.winner, price: Number((bank * 0.9).toFixed(2)), probability: undefined }]}
+            />
           ) : (
             <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
           )}
         </Card>
-        <Card title="Total bank" style={{ fontSize: 32 }}>
+        <Card title={t('total-bank')} style={{ fontSize: 32 }}>
           {bank.toFixed(2)} <Icon component={() => <Image src={CoinIcon} alt="coin" width={32} height={32} />} />
         </Card>
         <Card className={styles.roulette}>
-          <PlayersRoulette className={styles.roulette} roulette={rouletteRef} players={players} onFinish={handleFinish} />
+          <PlayersRoulette
+            className={styles.roulette}
+            roulette={rouletteRef}
+            players={players}
+            onFinish={handleFinish}
+          />
         </Card>
         <Button size="large" type="primary" block onClick={handleSpin}>
-          Spin
+          {t('spin')}
         </Button>
         <LastDonatorsCard editable roulette={roulette?._id} />
       </div>
       <div className={styles.column}>
-        <Card title={`Players - ${players?.length ?? 0}`}>
+        <Card title={`${t('players')} - ${players?.length ?? 0}`}>
           <PlayersList players={players} onClick={handleTargetSelect} />
         </Card>
       </div>

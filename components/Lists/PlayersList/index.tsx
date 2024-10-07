@@ -10,6 +10,7 @@ import CoinIcon from '@public/coin-thumb-up-01.svg'
 import { Button, List, Popconfirm, Space, Typography } from 'antd'
 import Image from 'next/image'
 import { useCallback, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import styles from './styles.module.css'
 
 export type PlayerWithProbability = IPlayer & { probability?: number }
@@ -21,10 +22,17 @@ export interface PlayersListProps {
   onClick?: (player: IPlayer) => void
 }
 
-export const PlayersList: React.FC<PlayersListProps> = ({ players: items = [], showFilters = false, editable = false, onClick }) => {
+export const PlayersList: React.FC<PlayersListProps> = ({
+  players: items = [],
+  showFilters = false,
+  editable = false,
+  onClick,
+}) => {
   const [players, setPlayers] = useState<PlayerWithProbability[]>([])
 
   const [deletePlayers] = useDeletePlayersMutation()
+
+  const { t } = useTranslation()
 
   useEffect(() => {
     setPlayers(items)
@@ -44,12 +52,14 @@ export const PlayersList: React.FC<PlayersListProps> = ({ players: items = [], s
       />
       {editable && (
         <Popconfirm
-          title="Delete ALL players"
-          description="Are you sure to delete all players?"
+          title={t('Delete ALL players')}
+          description={t('Are you sure to delete all players?')}
           icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
-          onConfirm={handlePlayersDelete}>
+          onConfirm={handlePlayersDelete}
+          cancelText={t('Cancel')}
+        >
           <Button type="primary" danger block>
-            Clear
+            {t('Clear')}
           </Button>
         </Popconfirm>
       )}
@@ -68,6 +78,8 @@ export const PlayersListItem: React.FC<PlayersListItemProps> = ({ player, editab
 
   const { isMobile } = useDevice()
 
+  const { t } = useTranslation()
+
   const handleClick = useCallback(() => {
     onClick?.(player)
     if (isMobile) {
@@ -81,7 +93,7 @@ export const PlayersListItem: React.FC<PlayersListItemProps> = ({ player, editab
         <PlayersListItemMeta player={player} />
         {editable && !isMobile && (
           <EditPlayerButton player={player?._id} type="primary">
-            Edit
+            {t('Edit')}
           </EditPlayerButton>
         )}
       </List.Item>
@@ -104,7 +116,8 @@ export const PlayersListItemMeta: React.FC<PlayersListItemMetaProps> = ({ player
         <Space>
           <Typography.Text>{player.name ?? 'anonim'}</Typography.Text>
           <Typography.Text type="secondary" style={{ fontWeight: 'normal' }}>
-            {player.price?.toFixed(2)} <Icon component={() => <Image src={CoinIcon} alt="coin" width={14} height={14} />} />
+            {player.price?.toFixed(2)}{' '}
+            <Icon component={() => <Image src={CoinIcon} alt="coin" width={14} height={14} />} />
           </Typography.Text>
         </Space>
       }

@@ -4,14 +4,21 @@ import { useDeletePlayerMutation, useEditPlayerMutation, useGetPlayerQuery } fro
 import { useEditRouletteMutation } from '@modules/api/roulette'
 import { Button, Divider, Popconfirm } from 'antd'
 import { useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
 
 export interface PlayerControlsCardProps extends Omit<AdminCardProps, 'children'> {
   player?: string
   roulette?: string
 }
 
-export const PlayerControlsCard: React.FC<PlayerControlsCardProps> = ({ player: playerId, roulette: rouletteId, ...props }) => {
+export const PlayerControlsCard: React.FC<PlayerControlsCardProps> = ({
+  player: playerId,
+  roulette: rouletteId,
+  ...props
+}) => {
   const { data: player } = useGetPlayerQuery(playerId, { skip: !playerId })
+
+  const { t } = useTranslation()
 
   const [editPlayer] = useEditPlayerMutation()
   const [editRoulette] = useEditRouletteMutation()
@@ -37,22 +44,24 @@ export const PlayerControlsCard: React.FC<PlayerControlsCardProps> = ({ player: 
   }, [player, deletePlayer])
 
   return (
-    <AdminCard title="Controls" {...props}>
+    <AdminCard title={t('controls')} {...props}>
       <Button block type="primary" disabled={!player?.roulette} onClick={handleTargetSelect}>
-        Make Winner
+        {t('make-winner')}
       </Button>
-      <Popconfirm title="Are you sure?" onConfirm={handleUnregister}>
+      <Popconfirm title={t('Are you sure?')} onConfirm={handleUnregister} cancelText={t('Cancel')}>
         <Button type="primary" danger block>
-          Un-Register
+          {t('Un-Register')}
         </Button>
       </Popconfirm>
       <Divider type="horizontal" style={{ marginBlock: 8 }} />
       <Popconfirm
-        title="Are you sure? (this action can't be undone)"
+        title={t('confirm')}
         icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
-        onConfirm={handleDelete}>
+        onConfirm={handleDelete}
+        cancelText={t('Cancel')}
+      >
         <Button type="dashed" danger block>
-          Delete
+          {t('Delete')}
         </Button>
       </Popconfirm>
     </AdminCard>

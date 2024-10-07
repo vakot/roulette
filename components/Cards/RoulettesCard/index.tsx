@@ -2,6 +2,7 @@ import { useAddRouletteMutation, useGetRoulettesQuery } from '@modules/api/roule
 import { Button, Card, CardProps, Flex, List } from 'antd'
 import { useRouter } from 'next/navigation'
 import { useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
 
 export interface RoulettesCardProps extends CardProps {
   editable?: boolean
@@ -11,6 +12,8 @@ export const RoulettesCard: React.FC<RoulettesCardProps> = ({ editable }) => {
   const router = useRouter()
 
   const { data: roulettes } = useGetRoulettesQuery()
+
+  const { t } = useTranslation()
 
   const [createRoulette] = useAddRouletteMutation()
 
@@ -22,9 +25,10 @@ export const RoulettesCard: React.FC<RoulettesCardProps> = ({ editable }) => {
     <Card
       title={
         <Flex gap={8} align="center" justify="space-between">
-          <span>Roulettes</span>
+          <span>{t('roulettes')}</span>
         </Flex>
-      }>
+      }
+    >
       {/* TODO: to sidebar navigation */}
       <List
         dataSource={roulettes}
@@ -38,7 +42,7 @@ export const RoulettesCard: React.FC<RoulettesCardProps> = ({ editable }) => {
       />
       {editable && (
         <Button type="primary" block onClick={handleCreateRoulette}>
-          Start NEW roulette
+          {t(`start-new-roulette`)}
         </Button>
       )}
     </Card>

@@ -13,6 +13,7 @@ import CoinIcon from '@public/coin-thumb-up-01.svg'
 import { Button, Card, Flex, Form } from 'antd'
 import Image from 'next/image'
 import { useCallback, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import styles from './page.module.css'
 
 export default function AdminPage({ params }: { readonly params: { id: string } }) {
@@ -25,6 +26,8 @@ export default function AdminPage({ params }: { readonly params: { id: string } 
   const { data: roulette } = useGetRouletteQuery(rouletteId)
 
   const [editRoulette] = useEditRouletteMutation()
+
+  const { t } = useTranslation()
   const [editPlayer] = useEditPlayerMutation()
   const [editPlayers] = useEditPlayersMutation()
 
@@ -48,32 +51,34 @@ export default function AdminPage({ params }: { readonly params: { id: string } 
   return (
     <main className={styles.main}>
       <div className={styles.column}>
-        <Card title="Last winner">
-          <PlayersList players={roulette?.winner ? [{ ...roulette.winner, price: Number((bank * 0.9).toFixed(2)) }] : []} />
-        </Card>
-        <AdminCard title="Next winner">
+        <AdminCard title={t('last-winner')}>
+          <PlayersList
+            players={roulette?.winner ? [{ ...roulette.winner, price: Number((bank * 0.9).toFixed(2)) }] : []}
+          />
+        </AdminCard>
+        <AdminCard title={t('next-winner')}>
           <PlayersList players={roulette?.target ? [roulette.target] : []} />
           <Button type="primary" danger block onClick={() => handleTargetSelect()}>
-            Clear
+            {t("Clear")}
           </Button>
         </AdminCard>
-        <Card title="Total bank" style={{ fontSize: 32 }}>
+        <Card title={t('total-bank')} style={{ fontSize: 32 }}>
           <span>
             {bank.toFixed(2)} <Icon component={() => <Image src={CoinIcon} alt="coin" width={32} height={32} />} />
           </span>
         </Card>
-        <AdminCard title="Add player">
+        <AdminCard title={t("add-player")}>
           <EditPlayerForm form={addPlayerForm} roulette={roulette?._id} />
           <Flex justify="flex-end">
             <Button type="primary" onClick={() => addPlayerForm.submit()}>
-              Add
+              {t("Add")}
             </Button>
           </Flex>
         </AdminCard>
         <LastDonatorsCard editable />
       </div>
       <div className={styles.column}>
-        <AdminCard title={`Players - ${players?.length ?? 0}`}>
+        <AdminCard title={`${t('players')} - ${players?.length ?? 0}`}>
           <PlayersList
             showFilters
             editable

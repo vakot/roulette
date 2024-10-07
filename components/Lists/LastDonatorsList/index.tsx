@@ -4,6 +4,7 @@ import { useDevice } from '@modules/hooks/useDevice'
 import { IDonator } from '@modules/models/IDonator'
 import { Button, List, Modal, Typography } from 'antd'
 import { useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
 
 export interface LastDonatorsListProps {
   roulette?: string
@@ -29,10 +30,17 @@ export interface LastDonatorsListItemProps {
   onClick?: (donator: IDonator) => void
 }
 
-export const LastDonatorsListItem: React.FC<LastDonatorsListItemProps> = ({ donator, roulette: rouletteId, editable = false, onClick }) => {
+export const LastDonatorsListItem: React.FC<LastDonatorsListItemProps> = ({
+  donator,
+  roulette: rouletteId,
+  editable = false,
+  onClick,
+}) => {
   const [editDonator] = useEditPlayerMutation()
 
   const { isMobile } = useDevice()
+
+  const { t } = useTranslation()
 
   const handleClick = useCallback(() => {
     onClick?.(donator)
@@ -40,15 +48,16 @@ export const LastDonatorsListItem: React.FC<LastDonatorsListItemProps> = ({ dona
 
   const handleRegister = useCallback(() => {
     Modal.confirm({
-      title: 'Register donator to current roulette?',
+      title: `${t('Register donator to current roulette?')}`,
       content: (
         <Typography.Text>
-          Are you sure you want to register <Typography.Text strong>{donator.name}</Typography.Text> to the current roulette?
+          {t('register_confirmation_part1')} <Typography.Text strong>{donator.name}</Typography.Text>{' '}
+          {t('register_confirmation_part2')}
         </Typography.Text>
       ),
       onOk: () => {
         editDonator({ ...donator, roulette: rouletteId })
-      }
+      },
     })
   }, [donator, editDonator, rouletteId])
 
@@ -57,11 +66,12 @@ export const LastDonatorsListItem: React.FC<LastDonatorsListItemProps> = ({ dona
       onClick={() => {
         handleClick()
         handleRegister()
-      }}>
+      }}
+    >
       <PlayersListItemMeta player={donator} />
       {editable && !isMobile && (
         <Button type="primary" onClick={handleRegister}>
-          Register
+          {t('register')}
         </Button>
       )}
     </List.Item>
