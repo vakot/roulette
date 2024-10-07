@@ -66,7 +66,7 @@ export const LastDonatorsListItem: React.FC<LastDonatorsListItemProps> = ({
     <List.Item
       onClick={() => {
         handleClick()
-        // handleRegister()
+        handleRegister()
       }}
     >
       <PlayersListItemMeta player={donator} />
