@@ -1,11 +1,10 @@
 import axios from 'axios'
-import { Server } from 'socket.io'
 import WebSocket from 'ws'
 
 const port = parseInt(process.env.PORT ?? '3000', 10)
 const hostname = process.env.HOSTNAME ?? 'localhost'
 
-export const initializeSocket = (io: Server) => {
+export const initializeSocket = () => {
   if (!process.env.STREAM_ELEMENTS_URL) {
     throw new Error('Invalid/Missing environment variable: "STREAM_ELEMENTS_URL"')
   }
