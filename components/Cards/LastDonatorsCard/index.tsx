@@ -4,6 +4,7 @@ import { useGetRouletteQuery } from '@modules/api/roulette'
 import { IRoulette } from '@modules/models/Roulette'
 import { Button, Card, CardProps, Flex } from 'antd'
 import { useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
 
 export interface LastDonatorsCardProps extends CardProps {
   roulette?: IRoulette['_id']
@@ -16,6 +17,8 @@ export const LastDonatorsCard: React.FC<LastDonatorsCardProps> = ({ roulette: ro
 
   const [editPlayers] = useEditPlayersMutation()
 
+  const { t } = useTranslation()
+
   const handleRegisterAll = useCallback(() => {
     if (lastDonators?.length) {
       editPlayers(lastDonators.map((player) => ({ ...player, roulette: roulette?._id })))
@@ -26,14 +29,15 @@ export const LastDonatorsCard: React.FC<LastDonatorsCardProps> = ({ roulette: ro
     <Card
       title={
         <Flex gap={8} align="center" justify="space-between">
-          <span>Last donators</span>
+          <span>{t('last-donators')}</span>
           {editable && (
             <Button type="primary" onClick={handleRegisterAll}>
-              Register all
+              {t('register-all')}
             </Button>
           )}
         </Flex>
-      }>
+      }
+    >
       <LastDonatorsList roulette={rouletteId} editable={editable} />
     </Card>
   )
