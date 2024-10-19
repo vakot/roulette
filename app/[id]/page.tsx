@@ -110,7 +110,7 @@ const RoulettePage: NextPage<{ params: { id: string } }> = (context) => {
             onFinish={handleFinish}
           />
         </Card>
-        <Button size="large" type="primary" block onClick={handleSpin}disabled={isSpinning}>
+        <Button size="large" type="primary" block onClick={handleSpin} disabled={isSpinning || (players?.length ?? 0) < 2}>
           {t('spin')}
         </Button>
         <LastDonatorsCard editable roulette={roulette?._id} />
