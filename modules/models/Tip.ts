@@ -1,5 +1,5 @@
 export interface ITip {
-  _id: string
+  tipId: string
   username?: string
   amount?: number
   currency?: string

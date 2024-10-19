@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
     const body: ITip = await request.json()
 
     const player: IPlayer = {
-      _id: body._id,
+      _id: body.tipId,
       name: body.username,
       price: body.amount,
       color: getRandomColor(),
@@ -21,10 +21,14 @@ export async function POST(request: NextRequest) {
       avatar: body.avatar
     }
 
-    Player.create(player).then(() => invalidatesTags(playerApi.reducerPath, ['Player']))
+    await Player.create(player).then(() => invalidatesTags(playerApi.reducerPath, ['Player']))
 
-    return NextResponse.json(null, { status: 200 })
-  } catch (error) {
+    return NextResponse.json(null, { status: 201 })
+  } catch (error: any) {
+    if (error.code === 11000) {
+      return NextResponse.json('Player with provided ID already exists', { status: 202 })
+    }
+
     console.error(error)
 
     return NextResponse.json({ error }, { status: 500 })

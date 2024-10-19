@@ -11,14 +11,14 @@ export const initializeSocket = (server: any) => {
     }
   })
 
+  initializeStreamElementSocket()
+
   _global.io.on('connection', (socket) => {
     console.log('🚀 User connected', socket.id)
 
     socket.on('disconnect', () => {
       console.log('🔴 User disconnected', socket.id)
     })
-
-    initializeStreamElementSocket(_global.io)
   })
 
   return _global.io
