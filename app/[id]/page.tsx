@@ -13,7 +13,7 @@ import { getRandomIndexWithProbabilities } from '@utils/helpers'
 import { Button, Card, Empty } from 'antd'
 import { NextPage } from 'next'
 import Image from 'next/image'
-import { useCallback, useMemo } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styles from './page.module.css'
 
@@ -54,10 +54,14 @@ const RoulettePage: NextPage<{ params: { id: string } }> = (context) => {
     [editRoulette, roulette]
   )
 
+  const [isSpinning, setIsSpinning] = useState(false)
+
   const handleSpin = useCallback(() => {
     if (!players) {
       return
     }
+
+    setIsSpinning(true)
 
     const index = roulette?.target
       ? players.findIndex(({ _id }) => _id === roulette.target!._id)
@@ -106,7 +110,7 @@ const RoulettePage: NextPage<{ params: { id: string } }> = (context) => {
             onFinish={handleFinish}
           />
         </Card>
-        <Button size="large" type="primary" block onClick={handleSpin}>
+        <Button size="large" type="primary" block onClick={handleSpin} disabled={isSpinning || (players?.length ?? 0) < 2}>
           {t('spin')}
         </Button>
         <LastDonatorsCard editable roulette={roulette?._id} />
