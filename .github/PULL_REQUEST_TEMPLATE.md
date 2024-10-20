@@ -1,6 +1,6 @@
 ## Overview
 
-[Task line URL](diapason-url-from-spreadsheet)
+[Asana Ticket](https://app.asana.com/xxxxx)
 [Mentions (optional)]()
 
 Briefly describe the changes introduced in this **Pull Request**. Highlight key features, bug fixes, or improvements made to the donation service integration or the application as a whole.
@@ -18,7 +18,7 @@ Briefly describe the changes introduced in this **Pull Request**. Highlight key 
 ### 📋 Checklist
 
 - [ ] Self-review
-- [ ] Ensure all tests pass
+- [ ] ~~Ensure all tests pass~~
 - [ ] Code meets project guidelines (eslint & prettier)
 - [ ] No breaking changes
 
