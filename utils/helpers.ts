@@ -244,3 +244,25 @@ export function toArray<T = unknown>(input: any): T[] {
 
   return [input]
 }
+
+/**
+ * Determines the base URL for making requests, dynamically adjusting based on
+ * the execution environment (client-side or server-side).
+ *
+ * - On the client-side, it returns the current window location's protocol and host.
+ * - On the server-side, it uses environment variables for hostname and port,
+ *   defaulting to 'localhost:3000' if not specified.
+ *
+ * @returns {string} The base URL for API requests.
+ */
+export function getBaseUrl(): string {
+  if (typeof window !== 'undefined') {
+    // Client-side, get the base URL dynamically
+    return `${window.location.protocol}//${window.location.host}`
+  } else {
+    // Server-side, use environment variables or default to localhost
+    const port = process.env.PORT ?? '3000'
+    const hostname = process.env.HOSTNAME ?? 'localhost'
+    return `http://${hostname}:${port}`
+  }
+}
