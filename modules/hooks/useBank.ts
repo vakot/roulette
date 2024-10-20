@@ -2,7 +2,7 @@ import { useGetPlayersQuery } from '@modules/api/player'
 import { IRoulette } from '@modules/models/Roulette'
 import { useMemo } from 'react'
 
-export const useBank = (rouletteId: IRoulette['_id']): [number, { isLoading: boolean }] => {
+export const useBank = (rouletteId?: IRoulette['_id']): [number, { isLoading: boolean }] => {
   const { data: players, isLoading: isPlayersLoading } = useGetPlayersQuery({ roulette: rouletteId }, { skip: !rouletteId })
 
   const bank = useMemo<number>(() => {
