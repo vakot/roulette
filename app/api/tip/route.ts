@@ -10,18 +10,28 @@ dbConnect()
 
 export async function POST(request: NextRequest) {
   try {
+    const apiKey = request.headers.get('X-Key')
     const body: ITip = await request.json()
 
-    const player: IPlayer = {
-      _id: body.tipId,
-      name: body.username,
-      price: body.amount,
-      color: getRandomColor(),
-      message: body.message,
-      avatar: body.avatar
+    if (body.source !== 'donatello') {
+      return NextResponse.json('Access restricted', { status: 401 })
     }
 
-    await Player.create(player).then(() => invalidatesTags(playerApi.reducerPath, ['Player']))
+    if (apiKey !== process.env.DONATELLO_API_KEY) {
+      return NextResponse.json('Invalid API key', { status: 401 })
+    }
+
+    if (await Player.findOne({ tipId: body.pubId })) {
+      return NextResponse.json('Duplicated key', { status: 202 })
+    }
+
+    await Player.create({
+      tipId: body.pubId,
+      name: body.clientName,
+      price: body.amount,
+      color: getRandomColor(),
+      message: body.message
+    }).then(() => invalidatesTags(playerApi.reducerPath, ['Player']))
 
     return NextResponse.json(null, { status: 201 })
   } catch (error: any) {

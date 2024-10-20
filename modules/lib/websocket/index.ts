@@ -1,5 +1,4 @@
 import { Server } from 'socket.io'
-import { initializeSocket as initializeStreamElementSocket } from './stream-element'
 
 let _global = global as typeof globalThis & { io: Server }
 
@@ -10,8 +9,6 @@ export const initializeSocket = (server: any) => {
       methods: ['GET', 'POST']
     }
   })
-
-  initializeStreamElementSocket()
 
   _global.io.on('connection', (socket) => {
     console.log('🚀 User connected', socket.id)
