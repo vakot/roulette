@@ -31,7 +31,13 @@ export const AddPlayerButton: React.FC<AddPlayerButtonProps> = ({
         }}
         {...props}></Button>
 
-      <AddPlayerModal open={open} roulette={rouletteId} onOk={() => setOpen(false)} onCancel={() => setOpen(false)} onFinish={onFinish} />
+      <AddPlayerModal
+        open={open}
+        roulette={rouletteId}
+        onOk={() => setOpen(false)}
+        onCancel={() => setOpen(false)}
+        onFinish={onFinish}
+      />
     </>
   )
 }

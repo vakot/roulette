@@ -1,6 +1,6 @@
 import { playerApi } from '@modules/api/player'
 import dbConnect from '@modules/lib/mongoose'
-import Player, { IPlayer } from '@modules/models/Player'
+import Player from '@modules/models/Player'
 import { ITip } from '@modules/models/Tip'
 import { invalidatesTags } from '@modules/store/utils/invalidatesTags'
 import { getRandomColor } from '@utils/helpers'
@@ -30,13 +30,15 @@ export async function POST(request: NextRequest) {
       name: body.clientName,
       price: body.amount,
       color: getRandomColor(),
-      message: body.message
+      message: body.message,
     }).then(() => invalidatesTags(playerApi.reducerPath, ['Player']))
 
     return NextResponse.json(null, { status: 201 })
   } catch (error: any) {
     if (error.code === 11000) {
-      return NextResponse.json('Player with provided ID already exists', { status: 202 })
+      return NextResponse.json('Player with provided ID already exists', {
+        status: 202,
+      })
     }
 
     console.error(error)

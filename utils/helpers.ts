@@ -7,7 +7,10 @@ import { v1 as uuidv1 } from 'uuid'
  * @param {number} exponent Exponent value for scaling probabilities (higher exponent gives higher chances to larger numbers).
  * @returns {number} A random index from the array, selected based on the calculated probabilities (fallback: -1).
  */
-export function getRandomIndexWithProbabilities(items: number[] = [], exponent: number = 1.5): number {
+export function getRandomIndexWithProbabilities(
+  items: number[] = [],
+  exponent: number = 1.5
+): number {
   const probabilities = getProbabilities(items, exponent)
 
   // Generate a random number between 0 and 1
@@ -37,7 +40,10 @@ export function getRandomIndexWithProbabilities(items: number[] = [], exponent: 
  * @param {number} exponent Exponent value for scaling probabilities (higher exponent gives higher chances to larger numbers).
  * @returns {number[]} An array of probabilities in decimal form corresponding to each item.
  */
-export function getProbabilities(items: number[], exponent: number = 1.5): number[] {
+export function getProbabilities(
+  items: number[],
+  exponent: number = 1.5
+): number[] {
   // Calculate scaled values using exponentiation
   const scaledValues = items.map((item) => Math.pow(item, exponent))
 
@@ -142,12 +148,13 @@ export function getRandomName(
     'Phi',
     'Chi',
     'Psi',
-    'Omega'
+    'Omega',
   ],
   min: number = 1,
   max: number = 3
 ): string {
-  const getRandomWord = (arr: string[]) => arr[Math.floor(Math.random() * arr.length)]
+  const getRandomWord = (arr: string[]) =>
+    arr[Math.floor(Math.random() * arr.length)]
 
   // Determine the number of words in the name
   const length = Math.floor(Math.random() * (max - min + 1)) + min
@@ -173,7 +180,9 @@ export function toCleanObject<T = unknown>(obj: T): Partial<T> | null {
   }
 
   if (Array.isArray(obj)) {
-    const cleanedArray = obj.map((item) => toCleanObject(item)).filter((item) => item !== undefined && item !== null)
+    const cleanedArray = obj
+      .map((item) => toCleanObject(item))
+      .filter((item) => item !== undefined && item !== null)
 
     return cleanedArray.length > 0 ? (cleanedArray as unknown as T) : null
   }
@@ -222,7 +231,7 @@ export function toUpdateQuery<T>(obj: T): Record<string, any> {
 
   return {
     ...(Object.keys(set).length && { $set: set }),
-    ...(Object.keys(unset).length && { $unset: unset })
+    ...(Object.keys(unset).length && { $unset: unset }),
   }
 }
 

@@ -54,7 +54,12 @@ export const EditPlayerModal: React.FC<EditPlayerModalProps> = ({
       destroyOnClose={destroyOnClose}
       title={t('Edit player modal')}
       {...props}>
-      <EditPlayerForm form={form} player={player} roulette={rouletteId} onFinish={handleFinish} />
+      <EditPlayerForm
+        form={form}
+        player={player}
+        roulette={rouletteId}
+        onFinish={handleFinish}
+      />
     </Modal>
   )
 }

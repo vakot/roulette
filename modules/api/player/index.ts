@@ -14,68 +14,95 @@ export const playerApi = createApi({
     getPlayer: builder.query<IPlayer, string | undefined | void>({
       query: (id) => ({
         url: `player/${id}`,
-        method: 'GET'
+        method: 'GET',
       }),
-      providesTags: ['Player']
+      providesTags: ['Player'],
     }),
-    addPlayer: builder.mutation<IPlayer, Partial<Omit<IPlayer, 'roulette' | 'tip'> & { roulette: IRoulette | string }>>({
+    addPlayer: builder.mutation<
+      IPlayer,
+      Partial<
+        Omit<IPlayer, 'roulette' | 'tip'> & { roulette: IRoulette | string }
+      >
+    >({
       query: (body) => ({
         url: 'player',
         method: 'POST',
-        body: toArray(body)
+        body: toArray(body),
       }),
-      invalidatesTags: () => invalidatesTags('playerApi', ['Player', 'Roulette'])
+      invalidatesTags: () =>
+        invalidatesTags('playerApi', ['Player', 'Roulette']),
     }),
-    editPlayer: builder.mutation<IPlayer, Partial<Omit<IPlayer, 'roulette' | 'tip'> & { roulette: IRoulette | string | null | undefined }>>(
-      {
-        query: (body) => ({
-          url: `player/${body._id}`,
-          method: 'PATCH',
-          body
-        }),
-        invalidatesTags: () => invalidatesTags('playerApi', ['Player', 'Roulette'])
-      }
-    ),
+    editPlayer: builder.mutation<
+      IPlayer,
+      Partial<
+        Omit<IPlayer, 'roulette' | 'tip'> & {
+          roulette: IRoulette | string | null | undefined
+        }
+      >
+    >({
+      query: (body) => ({
+        url: `player/${body._id}`,
+        method: 'PATCH',
+        body,
+      }),
+      invalidatesTags: () =>
+        invalidatesTags('playerApi', ['Player', 'Roulette']),
+    }),
     deletePlayer: builder.mutation<IPlayer, IPlayer['_id']>({
       query: (id) => ({
         url: `player/${id}`,
-        method: 'DELETE'
+        method: 'DELETE',
       }),
-      invalidatesTags: () => invalidatesTags('playerApi', ['Player', 'Roulette'])
+      invalidatesTags: () =>
+        invalidatesTags('playerApi', ['Player', 'Roulette']),
     }),
-    getPlayers: builder.query<IPlayer[], { roulette: IRoulette['_id'] | 'none' } | undefined | void>({
+    getPlayers: builder.query<
+      IPlayer[],
+      { roulette: IRoulette['_id'] | 'none' } | undefined | void
+    >({
       query: (query) => ({
         url: 'player',
         method: 'GET',
-        ...(query && { params: toCleanObject(query) as Record<string, any> })
+        ...(query && { params: toCleanObject(query) as Record<string, any> }),
       }),
-      providesTags: ['Player']
+      providesTags: ['Player'],
     }),
     addPlayers: builder.mutation<void, Partial<IPlayer>[]>({
       query: (body) => ({
         url: 'player',
         method: 'POST',
-        body
+        body,
       }),
-      invalidatesTags: () => invalidatesTags('playerApi', ['Player', 'Roulette'])
+      invalidatesTags: () =>
+        invalidatesTags('playerApi', ['Player', 'Roulette']),
     }),
-    editPlayers: builder.mutation<IPlayer[], Partial<Omit<IPlayer, 'roulette' | 'tip'> & { roulette: IRoulette | string }>[]>({
+    editPlayers: builder.mutation<
+      IPlayer[],
+      Partial<
+        Omit<IPlayer, 'roulette' | 'tip'> & { roulette: IRoulette | string }
+      >[]
+    >({
       query: (body) => ({
         url: `player`,
         method: 'PATCH',
-        body
+        body,
       }),
-      invalidatesTags: () => invalidatesTags('playerApi', ['Player', 'Roulette'])
+      invalidatesTags: () =>
+        invalidatesTags('playerApi', ['Player', 'Roulette']),
     }),
-    deletePlayers: builder.mutation<IPlayer[], IPlayer['_id'][] | undefined | void>({
+    deletePlayers: builder.mutation<
+      IPlayer[],
+      IPlayer['_id'][] | undefined | void
+    >({
       query: (playersIds) => ({
         url: `player`,
         method: 'DELETE',
-        body: playersIds
+        body: playersIds,
       }),
-      invalidatesTags: () => invalidatesTags('playerApi', ['Player', 'Roulette'])
-    })
-  })
+      invalidatesTags: () =>
+        invalidatesTags('playerApi', ['Player', 'Roulette']),
+    }),
+  }),
 })
 
 export const {
@@ -86,5 +113,5 @@ export const {
   useGetPlayersQuery,
   useAddPlayersMutation,
   useEditPlayersMutation,
-  useDeletePlayersMutation
+  useDeletePlayersMutation,
 } = playerApi

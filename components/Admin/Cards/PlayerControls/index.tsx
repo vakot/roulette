@@ -1,12 +1,17 @@
 import { QuestionCircleOutlined } from '@ant-design/icons'
 import { AdminCard, AdminCardProps } from '@components/Admin/Cards'
-import { useDeletePlayerMutation, useEditPlayerMutation, useGetPlayerQuery } from '@modules/api/player'
+import {
+  useDeletePlayerMutation,
+  useEditPlayerMutation,
+  useGetPlayerQuery,
+} from '@modules/api/player'
 import { useEditRouletteMutation } from '@modules/api/roulette'
 import { Button, Divider, Popconfirm } from 'antd'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 
-export interface PlayerControlsCardProps extends Omit<AdminCardProps, 'children'> {
+export interface PlayerControlsCardProps
+  extends Omit<AdminCardProps, 'children'> {
   player?: string
   roulette?: string
 }
@@ -45,10 +50,17 @@ export const PlayerControlsCard: React.FC<PlayerControlsCardProps> = ({
 
   return (
     <AdminCard title={t('controls')} {...props}>
-      <Button block type="primary" disabled={!player?.roulette} onClick={handleTargetSelect}>
+      <Button
+        block
+        type="primary"
+        disabled={!player?.roulette}
+        onClick={handleTargetSelect}>
         {t('make-winner')}
       </Button>
-      <Popconfirm title={t('Are you sure?')} onConfirm={handleUnregister} cancelText={t('Cancel')}>
+      <Popconfirm
+        title={t('Are you sure?')}
+        onConfirm={handleUnregister}
+        cancelText={t('Cancel')}>
         <Button type="primary" danger block>
           {t('Un-Register')}
         </Button>
@@ -58,8 +70,7 @@ export const PlayerControlsCard: React.FC<PlayerControlsCardProps> = ({
         title={t('confirm')}
         icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
         onConfirm={handleDelete}
-        cancelText={t('Cancel')}
-      >
+        cancelText={t('Cancel')}>
         <Button type="dashed" danger block>
           {t('Delete')}
         </Button>

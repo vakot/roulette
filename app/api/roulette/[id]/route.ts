@@ -5,9 +5,14 @@ import { NextRequest, NextResponse } from 'next/server'
 
 dbConnect()
 
-export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
   try {
-    const roulette = await Roulette.findById(params.id).populate('winner').populate('target')
+    const roulette = await Roulette.findById(params.id)
+      .populate('winner')
+      .populate('target')
 
     if (!roulette) {
       return NextResponse.json({ error: 'not found' }, { status: 404 })
@@ -21,7 +26,10 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
   }
 }
 
-export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PATCH(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
   try {
     const body = await request.json()
 
@@ -29,7 +37,11 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
       return NextResponse.json({ error: 'ID is required' }, { status: 400 })
     }
 
-    const newRoulette = await Roulette.findByIdAndUpdate(params.id, toUpdateQuery(body), { new: true, runValidators: true })
+    const newRoulette = await Roulette.findByIdAndUpdate(
+      params.id,
+      toUpdateQuery(body),
+      { new: true, runValidators: true }
+    )
       .populate('winner')
       .populate('target')
 

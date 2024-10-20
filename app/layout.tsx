@@ -7,11 +7,11 @@ import '@styles/reset.css'
 import '@styles/variables.css'
 
 export const metadata: Metadata = {
-  title: 'Roulette'
+  title: 'Roulette',
 }
 
 export default function RootLayout({
-  children
+  children,
 }: Readonly<{
   children: React.ReactNode
 }>) {

@@ -5,7 +5,10 @@ import { NextRequest, NextResponse } from 'next/server'
 
 dbConnect()
 
-export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
   try {
     const player = await Player.findById(params.id).populate('roulette')
 
@@ -21,7 +24,10 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
   }
 }
 
-export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PATCH(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
   try {
     const body = await request.json()
 
@@ -29,9 +35,11 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
       return NextResponse.json({ error: 'ID is required' }, { status: 400 })
     }
 
-    const newPlayer = await Player.findByIdAndUpdate(params.id, toUpdateQuery(body), { new: true, runValidators: true }).populate(
-      'roulette'
-    )
+    const newPlayer = await Player.findByIdAndUpdate(
+      params.id,
+      toUpdateQuery(body),
+      { new: true, runValidators: true }
+    ).populate('roulette')
 
     if (!newPlayer) {
       return NextResponse.json({ error: 'not found' }, { status: 404 })
@@ -45,13 +53,18 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
   }
 }
 
-export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
   try {
     if (!params.id) {
       return NextResponse.json({ error: 'ID is required' }, { status: 400 })
     }
 
-    const deletedPlayer = await Player.findByIdAndDelete(params.id).populate('roulette')
+    const deletedPlayer = await Player.findByIdAndDelete(params.id).populate(
+      'roulette'
+    )
 
     if (!deletedPlayer) {
       return NextResponse.json({ error: 'not found' }, { status: 404 })

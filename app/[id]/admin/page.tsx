@@ -7,7 +7,11 @@ import { TargetCard } from '@components/Cards/TargetCard'
 import { WinnerCard } from '@components/Cards/WinnerCard'
 import styles from './page.module.css'
 
-export default function AdminPage({ params }: { readonly params: { id: string } }) {
+export default function AdminPage({
+  params,
+}: {
+  readonly params: { id: string }
+}) {
   const rouletteId = params.id
 
   return (

@@ -13,6 +13,11 @@ export const ThemeSwitch: React.FC = () => {
   }
 
   return (
-    <Switch checked={currentTheme === 'dark'} unCheckedChildren={<SunFilled />} checkedChildren={<MoonFilled />} onChange={handleChange} />
+    <Switch
+      checked={currentTheme === 'dark'}
+      unCheckedChildren={<SunFilled />}
+      checkedChildren={<MoonFilled />}
+      onChange={handleChange}
+    />
   )
 }

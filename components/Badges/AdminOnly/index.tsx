@@ -7,7 +7,11 @@ export interface AdminOnlyProps extends Omit<BadgeProps, 'text'> {
   hideBadge?: boolean
 }
 
-export const AdminOnly: React.FC<AdminOnlyProps> = ({ hideBadge = false, children, ...props }) => {
+export const AdminOnly: React.FC<AdminOnlyProps> = ({
+  hideBadge = false,
+  children,
+  ...props
+}) => {
   const { t } = useTranslation()
   // TODO: is admin check
 

@@ -1,4 +1,8 @@
-import { FilterOutlined, SortAscendingOutlined, SortDescendingOutlined } from '@ant-design/icons'
+import {
+  FilterOutlined,
+  SortAscendingOutlined,
+  SortDescendingOutlined,
+} from '@ant-design/icons'
 import { PlayerWithProbability } from '@components/Lists/BasePlayersList'
 import { Button, Flex, Form, Input, Select, Slider, Space } from 'antd'
 import { useEffect, useMemo } from 'react'
@@ -16,7 +20,10 @@ export interface PlayerFiltersProps {
   setPlayers?: React.Dispatch<React.SetStateAction<PlayerWithProbability[]>>
 }
 
-export const PlayerFilters: React.FC<PlayerFiltersProps> = ({ players = [], setPlayers }) => {
+export const PlayerFilters: React.FC<PlayerFiltersProps> = ({
+  players = [],
+  setPlayers,
+}) => {
   const [form] = Form.useForm()
 
   const name = Form.useWatch<Filter['name']>('name', form)
@@ -29,18 +36,22 @@ export const PlayerFilters: React.FC<PlayerFiltersProps> = ({ players = [], setP
   const { min, max } = useMemo(() => {
     return {
       min: Math.max(Math.min(...players.map(({ price }) => price ?? 0)), 0),
-      max: Math.min(Math.max(...players.map(({ price }) => price ?? 0)), 999_999)
+      max: Math.min(
+        Math.max(...players.map(({ price }) => price ?? 0)),
+        999_999
+      ),
     }
   }, [players])
 
   useEffect(() => {
-    let result = [...players]
+    const result = [...players]
       .filter((player) => player.name?.toLowerCase().includes(name ?? ''))
       .filter(
         (player) =>
           !price ||
           price.length < 2 ||
-          ((player.price ?? 0) >= (isFinite(price[0]) ? price[0] : min) && (player.price ?? 0) <= (isFinite(price[1]) ? price[1] : max))
+          ((player.price ?? 0) >= (isFinite(price[0]) ? price[0] : min) &&
+            (player.price ?? 0) <= (isFinite(price[1]) ? price[1] : max))
       )
 
     if (sort) {
@@ -64,7 +75,7 @@ export const PlayerFilters: React.FC<PlayerFiltersProps> = ({ players = [], setP
       form={form}
       layout="vertical"
       initialValues={{
-        price: [min, max]
+        price: [min, max],
       }}>
       <Space direction="vertical" style={{ width: '100%' }}>
         <Form.Item name="name" noStyle>
@@ -72,7 +83,13 @@ export const PlayerFilters: React.FC<PlayerFiltersProps> = ({ players = [], setP
         </Form.Item>
 
         <Form.Item name="price" noStyle>
-          <Slider step={10} range min={min} max={max} tooltip={{ formatter: (value) => value?.toFixed(0) }} />
+          <Slider
+            step={10}
+            range
+            min={min}
+            max={max}
+            tooltip={{ formatter: (value) => value?.toFixed(0) }}
+          />
         </Form.Item>
         <Flex gap={8}>
           <Form.Item name="sort" style={{ flex: 1, margin: 0 }}>
@@ -81,7 +98,7 @@ export const PlayerFilters: React.FC<PlayerFiltersProps> = ({ players = [], setP
               options={[
                 { label: `${t('Name')}`, value: 'name' },
                 { label: `${t('Price')}`, value: 'price' },
-                { label: `${t('Probability')}`, value: 'probability' }
+                { label: `${t('Probability')}`, value: 'probability' },
               ]}
               suffixIcon={<FilterOutlined />}
               allowClear
@@ -90,11 +107,23 @@ export const PlayerFilters: React.FC<PlayerFiltersProps> = ({ players = [], setP
           <Form.Item name="order" noStyle>
             <Button
               type="primary"
-              icon={order === 'desc' ? <SortDescendingOutlined /> : <SortAscendingOutlined />}
-              onClick={() => form.setFieldValue('order', order === 'desc' ? 'asc' : 'desc')}
+              icon={
+                order === 'desc' ? (
+                  <SortDescendingOutlined />
+                ) : (
+                  <SortAscendingOutlined />
+                )
+              }
+              onClick={() =>
+                form.setFieldValue('order', order === 'desc' ? 'asc' : 'desc')
+              }
             />
           </Form.Item>
-          <Button type="primary" danger icon={<FilterOutlined />} onClick={() => form.resetFields()}>
+          <Button
+            type="primary"
+            danger
+            icon={<FilterOutlined />}
+            onClick={() => form.resetFields()}>
             {t('Reset')}
           </Button>
         </Flex>

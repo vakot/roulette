@@ -6,7 +6,7 @@ if (!process.env.MONGODB_URI) {
 
 const uri: string = process.env.MONGODB_URI
 
-let _global = global as typeof globalThis & { mongoose: any }
+const _global = global as typeof globalThis & { mongoose: any }
 let cached = _global.mongoose
 
 if (!cached) {
