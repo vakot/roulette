@@ -7,7 +7,10 @@ import { RefObject, useEffect, useState } from 'react'
  * @param {RefObject<HTMLElement>} ref Reference to the component whose dimensions are observed.
  * @returns {{ width: number; height: number }} Object containing the current width and height of the observed component.
  */
-export function useDimensions(ref: RefObject<HTMLElement>): { width: number; height: number } {
+export function useDimensions(ref: RefObject<HTMLElement>): {
+  width: number
+  height: number
+} {
   const [width, setWidth] = useState<number>(0)
   const [height, setHeight] = useState<number>(0)
 

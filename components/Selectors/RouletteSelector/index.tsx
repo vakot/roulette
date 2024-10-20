@@ -5,9 +5,12 @@ import type { IRoulette } from '@modules/models/Roulette'
 import { Select } from 'antd'
 import { useMemo } from 'react'
 
-export interface RouletteSelectorProps extends SelectorProps<IRoulette['_id']> {}
+export interface RouletteSelectorProps
+  extends SelectorProps<IRoulette['_id']> {}
 
-export const RouletteSelector: React.FC<RouletteSelectorProps> = ({ ...props }) => {
+export const RouletteSelector: React.FC<RouletteSelectorProps> = ({
+  ...props
+}) => {
   const { data: roulettes } = useGetRoulettesQuery()
 
   const { isDesktop } = useDevice()
@@ -16,5 +19,14 @@ export const RouletteSelector: React.FC<RouletteSelectorProps> = ({ ...props }) 
     return roulettes?.map(({ _id }) => ({ value: _id, label: _id }))
   }, [roulettes])
 
-  return <Select options={options} showSearch allowClear={isDesktop} optionFilterProp="label" placeholder="Select roulette..." {...props} />
+  return (
+    <Select
+      options={options}
+      showSearch
+      allowClear={isDesktop}
+      optionFilterProp="label"
+      placeholder="Select roulette..."
+      {...props}
+    />
+  )
 }

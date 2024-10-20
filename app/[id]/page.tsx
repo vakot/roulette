@@ -7,7 +7,10 @@ import { WinnerCard } from '@components/Cards/WinnerCard'
 import { PlayersRoulette } from '@components/Players/Roulette'
 import Roulette from '@components/Roulette'
 import { useGetPlayersQuery } from '@modules/api/player'
-import { useEditRouletteMutation, useGetRouletteQuery } from '@modules/api/roulette'
+import {
+  useEditRouletteMutation,
+  useGetRouletteQuery,
+} from '@modules/api/roulette'
 import { IPlayer } from '@modules/models/Player'
 import { getRandomIndexWithProbabilities } from '@utils/helpers'
 import { Button, Card } from 'antd'
@@ -57,7 +60,12 @@ const RoulettePage: NextPage<{ params: { id: string } }> = (context) => {
         <WinnerCard roulette={roulette?._id} />
         <BankCard roulette={roulette?._id} />
         <Card className={styles.roulette}>
-          <PlayersRoulette className={styles.roulette} roulette={rouletteRef} players={players} onFinish={handleFinish} />
+          <PlayersRoulette
+            className={styles.roulette}
+            roulette={rouletteRef}
+            players={players}
+            onFinish={handleFinish}
+          />
         </Card>
         <Button size="large" type="primary" block onClick={handleSpin}>
           {t('spin')}

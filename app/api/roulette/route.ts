@@ -1,12 +1,11 @@
-import dbConnect from '@modules/lib/mongoose'
 import Roulette, { IRoulette } from '@modules/models/Roulette'
 import { NextRequest, NextResponse } from 'next/server'
 
-dbConnect()
-
 export async function GET(request: NextRequest) {
   try {
-    const roulettes = await Roulette.find().populate('winner').populate('target')
+    const roulettes = await Roulette.find()
+      .populate('winner')
+      .populate('target')
 
     return NextResponse.json(roulettes, { status: 200 })
   } catch (error) {

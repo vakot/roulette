@@ -4,7 +4,7 @@ export const useDevice = () => {
   const [device, setDevice] = useState({
     isDesktop: false,
     isTablet: false,
-    isMobile: false
+    isMobile: false,
   })
 
   useEffect(() => {
@@ -14,7 +14,7 @@ export const useDevice = () => {
       setDevice({
         isDesktop: width >= 1200,
         isTablet: width >= 768 && width < 1200,
-        isMobile: width < 768
+        isMobile: width < 768,
       })
     }
 

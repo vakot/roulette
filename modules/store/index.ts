@@ -9,12 +9,12 @@ export const makeStore = () => {
     reducer: {
       theme: themeReducer,
       [playerApi.reducerPath]: playerApi.reducer,
-      [rouletteApi.reducerPath]: rouletteApi.reducer
+      [rouletteApi.reducerPath]: rouletteApi.reducer,
     },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware()
         .concat(playerApi.middleware, rouletteApi.middleware)
-        .concat(createSocketMiddleware([playerApi, rouletteApi]))
+        .concat(createSocketMiddleware([playerApi, rouletteApi])),
   })
 }
 

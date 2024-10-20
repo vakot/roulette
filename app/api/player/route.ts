@@ -1,14 +1,11 @@
-import dbConnect from '@modules/lib/mongoose'
 import Player, { IPlayer } from '@modules/models/Player'
 import { FilterQuery } from 'mongoose'
 import { NextRequest, NextResponse } from 'next/server'
 
-dbConnect()
-
 export async function GET(request: NextRequest) {
   try {
     const {
-      nextUrl: { searchParams }
+      nextUrl: { searchParams },
     } = request
 
     const rouletteId = searchParams.get('roulette')
@@ -21,7 +18,9 @@ export async function GET(request: NextRequest) {
       filters.roulette = rouletteId
     }
 
-    const players = await Player.find(filters).sort({ createdAt: -1 }).populate('roulette')
+    const players = await Player.find(filters)
+      .sort({ createdAt: -1 })
+      .populate('roulette')
 
     return NextResponse.json(players, { status: 200 })
   } catch (error) {
@@ -53,8 +52,8 @@ export async function PATCH(request: NextRequest) {
       body.map((player) => ({
         updateOne: {
           filter: { _id: player._id },
-          update: { $set: player }
-        }
+          update: { $set: player },
+        },
       }))
     )
 

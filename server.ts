@@ -29,6 +29,6 @@ app.prepare().then(() => {
       process.exit(1)
     })
     .listen(3000, () => {
-      console.log(`> Ready on ${getBaseUrl()}`)
+      console.log(`🌐 Ready on ${getBaseUrl()}`)
     })
 })

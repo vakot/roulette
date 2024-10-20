@@ -7,13 +7,13 @@ export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   adapter: MongoDBAdapter(clientPromise),
   session: {
-    strategy: 'jwt'
+    strategy: 'jwt',
   },
   providers: [
     GithubProvider({
       clientId: process.env.GITHUB_APP_CLIENT_ID as string,
-      clientSecret: process.env.GITHUB_APP_CLIENT_SECRET as string
-    })
+      clientSecret: process.env.GITHUB_APP_CLIENT_SECRET as string,
+    }),
   ],
   callbacks: {
     //   jwt: async ({ token, account }) => {
@@ -34,5 +34,5 @@ export const authOptions: NextAuthOptions = {
     //   }
     //   return true
     // }
-  }
+  },
 }

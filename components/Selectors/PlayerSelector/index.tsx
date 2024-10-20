@@ -10,8 +10,14 @@ export interface PlayerSelectorProps extends SelectorProps<IPlayer['_id']> {
   roulette: IRoulette['_id']
 }
 
-export const PlayerSelector: React.FC<PlayerSelectorProps> = ({ roulette: rouletteId, ...props }) => {
-  const { data: players } = useGetPlayersQuery({ roulette: rouletteId }, { skip: !rouletteId })
+export const PlayerSelector: React.FC<PlayerSelectorProps> = ({
+  roulette: rouletteId,
+  ...props
+}) => {
+  const { data: players } = useGetPlayersQuery(
+    { roulette: rouletteId },
+    { skip: !rouletteId }
+  )
 
   const { isDesktop } = useDevice()
 

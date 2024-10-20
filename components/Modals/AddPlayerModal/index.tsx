@@ -29,10 +29,16 @@ export const AddPlayerModal: React.FC<AddPlayerModalProps> = ({
 
   const [donator, setDonator] = useState<IPlayer | null>(null)
 
-  const { data: donators, isLoading: isDonatorsLoading } = useGetPlayersQuery({ roulette: 'none' })
-  const { data: roulette, isLoading: isRouletteLoading } = useGetRouletteQuery(rouletteId, { skip: !rouletteId })
+  const { data: donators, isLoading: isDonatorsLoading } = useGetPlayersQuery({
+    roulette: 'none',
+  })
+  const { data: roulette, isLoading: isRouletteLoading } = useGetRouletteQuery(
+    rouletteId,
+    { skip: !rouletteId }
+  )
 
-  const [editDonator, { isLoading: isEditDonatorLoading }] = useEditPlayerMutation()
+  const [editDonator, { isLoading: isEditDonatorLoading }] =
+    useEditPlayerMutation()
 
   const { t } = useTranslation()
 
@@ -80,19 +86,40 @@ export const AddPlayerModal: React.FC<AddPlayerModalProps> = ({
       cancelText={t('Cancel')}
       destroyOnClose={destroyOnClose}
       title={t('Add player modal')}
-      okButtonProps={{ disabled: isRouletteLoading || isDonatorsLoading || isEditDonatorLoading }}
+      okButtonProps={{
+        disabled:
+          isRouletteLoading || isDonatorsLoading || isEditDonatorLoading,
+      }}
       {...props}>
-      <Spin spinning={isRouletteLoading || isDonatorsLoading || isEditDonatorLoading}>
+      <Spin
+        spinning={
+          isRouletteLoading || isDonatorsLoading || isEditDonatorLoading
+        }>
         <Flex gap={8}>
-          <DonatorSelector value={donator?._id} onChange={handleSelect} style={{ flex: 1 }} />
-          <Button icon={<CloseOutlined />} type="primary" danger style={{ aspectRatio: 1 }} onClick={() => setDonator(null)} />
+          <DonatorSelector
+            value={donator?._id}
+            onChange={handleSelect}
+            style={{ flex: 1 }}
+          />
+          <Button
+            icon={<CloseOutlined />}
+            type="primary"
+            danger
+            style={{ aspectRatio: 1 }}
+            onClick={() => setDonator(null)}
+          />
         </Flex>
         <Divider>or</Divider>
         <EditPlayerForm
           form={form}
           roulette={rouletteId}
           onFinish={handleFinish}
-          disabled={!!donator || isRouletteLoading || isDonatorsLoading || isEditDonatorLoading}
+          disabled={
+            !!donator ||
+            isRouletteLoading ||
+            isDonatorsLoading ||
+            isEditDonatorLoading
+          }
         />
       </Spin>
     </Modal>

@@ -8,5 +8,8 @@ export const useProbabilities = (players: IPlayer[] = [], exponent?: number) =>
       players.map(({ price }) => price ?? 0),
       exponent
     )
-    return players.map(({ _id }, index) => ({ _id, value: probabilities[index] }))
+    return players.map(({ _id }, index) => ({
+      _id,
+      value: probabilities[index],
+    }))
   }, [players, exponent])

@@ -2,14 +2,16 @@ import { CloseOutlined } from '@ant-design/icons'
 import type { EditFormProps } from '@components/Forms/types'
 import { RouletteSelector } from '@components/Selectors/RouletteSelector'
 import { ColorPickerFormItem } from '@components/UI/ColorPicker'
-import { useAddPlayerMutation, useEditPlayerMutation, useGetPlayerQuery } from '@modules/api/player'
+import {
+  useAddPlayerMutation,
+  useEditPlayerMutation,
+  useGetPlayerQuery,
+} from '@modules/api/player'
 import type { IPlayer } from '@modules/models/Player'
 import type { IRoulette } from '@modules/models/Roulette'
-import { Button, ColorPickerProps, Flex, Form, GetProp, Input, Spin } from 'antd'
+import { Button, Flex, Form, Input, Spin } from 'antd'
 import { useCallback, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-
-type Color = Extract<GetProp<ColorPickerProps, 'value'>, string | { cleared: any }>
 
 export interface EditPlayerFormProps extends EditFormProps<IPlayer> {
   player?: IPlayer['_id']
@@ -26,14 +28,19 @@ export const EditPlayerForm: React.FC<EditPlayerFormProps> = ({
 }) => {
   const [form] = Form.useForm(_form)
 
-  const { data: player, isLoading: isPlayerLoading } = useGetPlayerQuery(playerId, { skip: !playerId })
+  const { data: player, isLoading: isPlayerLoading } = useGetPlayerQuery(
+    playerId,
+    { skip: !playerId }
+  )
   const [editPlayer] = useEditPlayerMutation()
   const [addPlayer] = useAddPlayerMutation()
 
   const handleFinish = useCallback(
     async (fields: Omit<IPlayer, '_id'>) => {
       try {
-        const response = player ? await editPlayer({ ...player, ...fields }) : await addPlayer(fields)
+        const response = player
+          ? await editPlayer({ ...player, ...fields })
+          : await addPlayer(fields)
 
         if (response.error) {
           onFinishFailed?.(response.error)
@@ -62,7 +69,7 @@ export const EditPlayerForm: React.FC<EditPlayerFormProps> = ({
         form={form}
         layout="vertical"
         initialValues={{
-          roulette: rouletteId
+          roulette: rouletteId,
         }}
         {...props}>
         <FormNameColorItem form={form} player={playerId} />
@@ -74,7 +81,11 @@ export const EditPlayerForm: React.FC<EditPlayerFormProps> = ({
   )
 }
 
-const FormNameColorItem: React.FC<EditPlayerFormProps> = ({ form: _form, player: playerId, disabled = false }) => {
+const FormNameColorItem: React.FC<EditPlayerFormProps> = ({
+  form: _form,
+  player: playerId,
+  disabled = false,
+}) => {
   const { t } = useTranslation()
 
   return (
@@ -89,7 +100,11 @@ const FormNameColorItem: React.FC<EditPlayerFormProps> = ({ form: _form, player:
   )
 }
 
-const FormPriceItem: React.FC<EditPlayerFormProps> = ({ form: _form, player: playerId, disabled = false }) => {
+const FormPriceItem: React.FC<EditPlayerFormProps> = ({
+  form: _form,
+  player: playerId,
+  disabled = false,
+}) => {
   const { t } = useTranslation()
 
   return (
@@ -99,7 +114,11 @@ const FormPriceItem: React.FC<EditPlayerFormProps> = ({ form: _form, player: pla
   )
 }
 
-const FormMessageItem: React.FC<EditPlayerFormProps> = ({ form: _form, player: playerId, disabled = false }) => {
+const FormMessageItem: React.FC<EditPlayerFormProps> = ({
+  form: _form,
+  player: playerId,
+  disabled = false,
+}) => {
   const { t } = useTranslation()
 
   return (
@@ -109,7 +128,11 @@ const FormMessageItem: React.FC<EditPlayerFormProps> = ({ form: _form, player: p
   )
 }
 
-const FormRouletteItem: React.FC<EditPlayerFormProps> = ({ form: _form, player: playerId, disabled = false }) => {
+const FormRouletteItem: React.FC<EditPlayerFormProps> = ({
+  form: _form,
+  player: playerId,
+  disabled = false,
+}) => {
   const [form] = Form.useForm(_form)
 
   const { t } = useTranslation()

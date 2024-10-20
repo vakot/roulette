@@ -14,12 +14,21 @@ export interface BasePlayersListProps {
   controls?: (player: IPlayer) => React.ReactNode
 }
 
-export const BasePlayersList: React.FC<BasePlayersListProps> = ({ players, controls }) => {
+export const BasePlayersList: React.FC<BasePlayersListProps> = ({
+  players,
+  controls,
+}) => {
   if (!players?.length) {
     return <Empty />
   }
   return (
-    <List itemLayout="horizontal" dataSource={players} renderItem={(item) => <BasePlayersListItem player={item} controls={controls} />} />
+    <List
+      itemLayout="horizontal"
+      dataSource={players}
+      renderItem={(item) => (
+        <BasePlayersListItem player={item} controls={controls} />
+      )}
+    />
   )
 }
 
@@ -28,7 +37,10 @@ export interface BasePlayersListItemProps {
   controls?: BasePlayersListProps['controls']
 }
 
-export const BasePlayersListItem: React.FC<BasePlayersListItemProps> = ({ player, controls }) => {
+export const BasePlayersListItem: React.FC<BasePlayersListItemProps> = ({
+  player,
+  controls,
+}) => {
   return (
     <List.Item className={styles.hover}>
       <BasePlayersListItemMeta player={player} />
@@ -41,7 +53,9 @@ export interface BasePlayersListItemMetaProps {
   player: PlayerWithProbability
 }
 
-export const BasePlayersListItemMeta: React.FC<BasePlayersListItemMetaProps> = ({ player }) => {
+export const BasePlayersListItemMeta: React.FC<
+  BasePlayersListItemMetaProps
+> = ({ player }) => {
   return (
     <List.Item.Meta
       avatar={
@@ -54,7 +68,12 @@ export const BasePlayersListItemMeta: React.FC<BasePlayersListItemMetaProps> = (
         <Space>
           <Typography.Text>{player.name ?? 'anonim'}</Typography.Text>
           <Typography.Text type="secondary" style={{ fontWeight: 'normal' }}>
-            {player.price?.toFixed(2)} <Icon component={() => <Image src={CoinIcon} alt="coin" width={14} height={14} />} />
+            {player.price?.toFixed(2)}{' '}
+            <Icon
+              component={() => (
+                <Image src={CoinIcon} alt="coin" width={14} height={14} />
+              )}
+            />
           </Typography.Text>
         </Space>
       }

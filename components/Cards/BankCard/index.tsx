@@ -16,7 +16,12 @@ export const BankCard: React.FC<BankCardProps> = ({ roulette: rouletteId }) => {
   return (
     <Card title={t('total-bank')} style={{ fontSize: 32 }}>
       <Spin spinning={isLoading}>
-        {bank.toFixed(2)} <Icon component={() => <Image src={CoinIcon} alt="coin" width={32} height={32} />} />
+        {bank.toFixed(2)}{' '}
+        <Icon
+          component={() => (
+            <Image src={CoinIcon} alt="coin" width={32} height={32} />
+          )}
+        />
       </Spin>
     </Card>
   )

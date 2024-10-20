@@ -8,7 +8,9 @@ export interface InvalidateAction extends Action {
   tags: string[]
 }
 
-export const createSocketMiddleware = <A extends InvalidateAction>(slices: any[]): Middleware<{}, any, Dispatch<A>> => {
+export const createSocketMiddleware = <A extends InvalidateAction>(
+  slices: any[]
+): Middleware<object, any, Dispatch<A>> => {
   return ((store: MiddlewareAPI) => {
     socket.on('invalidate', ({ reducerPath, tags }: A) => {
       const api = slices.find((slice) => slice.reducerPath === reducerPath)
@@ -19,5 +21,5 @@ export const createSocketMiddleware = <A extends InvalidateAction>(slices: any[]
     })
 
     return (next: Dispatch<A>) => (action: A) => next(action)
-  }) as Middleware<{}, any, Dispatch<A>>
+  }) as Middleware<object, any, Dispatch<A>>
 }

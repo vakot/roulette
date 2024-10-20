@@ -12,44 +12,52 @@ export const rouletteApi = createApi({
     getRoulette: builder.query<IRoulette, string | undefined | null | void>({
       query: (id) => ({
         url: `roulette/${id}`,
-        method: 'GET'
+        method: 'GET',
       }),
-      providesTags: ['Roulette']
+      providesTags: ['Roulette'],
     }),
     addRoulette: builder.mutation<IRoulette, Partial<IRoulette>>({
       query: (body) => ({
         url: 'roulette',
         method: 'POST',
-        body: { body }
+        body: { body },
       }),
-      invalidatesTags: () => invalidatesTags('rouletteApi', ['Roulette', 'Target']) as any
+      invalidatesTags: () =>
+        invalidatesTags('rouletteApi', ['Roulette', 'Target']) as any,
     }),
     editRoulette: builder.mutation<IRoulette, Partial<IRoulette>>({
       query: (body) => ({
         url: `roulette/${body._id}`,
         method: 'PATCH',
-        body
+        body,
       }),
-      invalidatesTags: () => invalidatesTags('rouletteApi', ['Roulette', 'Target']) as any
+      invalidatesTags: () =>
+        invalidatesTags('rouletteApi', ['Roulette', 'Target']) as any,
     }),
     getRoulettes: builder.query<IRoulette[], void>({
       query: (id) => ({
         url: 'roulette',
         method: 'GET',
-        params: { id }
+        params: { id },
       }),
-      providesTags: ['Roulette']
+      providesTags: ['Roulette'],
     }),
     addRoulettes: builder.mutation<IRoulette[], Partial<IRoulette>[]>({
       query: (body) => ({
         url: 'roulette',
         method: 'POST',
-        body: { body }
+        body: { body },
       }),
-      invalidatesTags: () => invalidatesTags('rouletteApi', ['Roulette', 'Target']) as any
-    })
-  })
+      invalidatesTags: () =>
+        invalidatesTags('rouletteApi', ['Roulette', 'Target']) as any,
+    }),
+  }),
 })
 
-export const { useGetRouletteQuery, useAddRouletteMutation, useEditRouletteMutation, useGetRoulettesQuery, useAddRoulettesMutation } =
-  rouletteApi
+export const {
+  useGetRouletteQuery,
+  useAddRouletteMutation,
+  useEditRouletteMutation,
+  useGetRoulettesQuery,
+  useAddRoulettesMutation,
+} = rouletteApi

@@ -20,7 +20,9 @@ export interface ColorPickerFormItemProps {
   className?: string
 }
 
-export const ColorPickerFormItem: React.FC<ColorPickerFormItemProps> = (props) => {
+export const ColorPickerFormItem: React.FC<ColorPickerFormItemProps> = (
+  props
+) => {
   return (
     <Form.Item {...props} getValueFromEvent={(color) => '#' + color.toHex()}>
       <AntdColorPicker />

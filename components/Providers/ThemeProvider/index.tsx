@@ -7,8 +7,13 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   return (
     <ConfigProvider
       theme={{
-        algorithm: currentTheme === 'dark' ? theme.darkAlgorithm : theme.defaultAlgorithm,
-        components: { Layout: { footerBg: currentTheme === 'dark' ? '#000000' : '#ffffff' } }
+        algorithm:
+          currentTheme === 'dark'
+            ? theme.darkAlgorithm
+            : theme.defaultAlgorithm,
+        components: {
+          Layout: { footerBg: currentTheme === 'dark' ? '#000000' : '#ffffff' },
+        },
       }}>
       {children}
     </ConfigProvider>

@@ -14,14 +14,21 @@ export interface PlayersListProps {
   roulette?: IRoulette['_id']
 }
 
-export const PlayersList: React.FC<PlayersListProps> = ({ roulette: rouletteId }) => {
+export const PlayersList: React.FC<PlayersListProps> = ({
+  roulette: rouletteId,
+}) => {
   const isAdminPage = useAdminPathname()
 
-  const { data: players, isFetching: isPlayersLoading } = useGetPlayersQuery({ roulette: rouletteId }, { skip: !rouletteId })
+  const { data: players, isFetching: isPlayersLoading } = useGetPlayersQuery(
+    { roulette: rouletteId },
+    { skip: !rouletteId }
+  )
 
   const [editRoulette] = useEditRouletteMutation()
 
-  const probabilities = getProbabilities(players?.map(({ price }) => price ?? 0) ?? [])
+  const probabilities = getProbabilities(
+    players?.map(({ price }) => price ?? 0) ?? []
+  )
 
   const handleTargetClick = useCallback(
     (player: IPlayer) => {
@@ -38,18 +45,21 @@ export const PlayersList: React.FC<PlayersListProps> = ({ roulette: rouletteId }
             .then(() =>
               message.success(
                 <Typography.Text>
-                  Player <Typography.Text strong>{player.name}</Typography.Text> set as a target
+                  Player <Typography.Text strong>{player.name}</Typography.Text>{' '}
+                  set as a target
                 </Typography.Text>
               )
             )
             .catch(() =>
               message.error(
                 <Typography.Text>
-                  Failed to set player <Typography.Text strong>{player.name}</Typography.Text> as a target
+                  Failed to set player{' '}
+                  <Typography.Text strong>{player.name}</Typography.Text> as a
+                  target
                 </Typography.Text>
               )
             )
-        }
+        },
       })
     },
     [rouletteId, isAdminPage, editRoulette]
@@ -58,11 +68,25 @@ export const PlayersList: React.FC<PlayersListProps> = ({ roulette: rouletteId }
   return (
     <Spin spinning={isPlayersLoading}>
       <BasePlayersList
-        players={players?.map((player, index) => ({ ...player, probability: probabilities[index] }))}
+        players={players?.map((player, index) => ({
+          ...player,
+          probability: probabilities[index],
+        }))}
         controls={(player) => (
           <Flex gap={8}>
-            <EditPlayerButton player={player._id} roulette={rouletteId} type="primary" />
-            {isAdminPage && <Button icon={<TrophyFilled />} type="primary" danger onClick={() => handleTargetClick(player)} />}
+            <EditPlayerButton
+              player={player._id}
+              roulette={rouletteId}
+              type="primary"
+            />
+            {isAdminPage && (
+              <Button
+                icon={<TrophyFilled />}
+                type="primary"
+                danger
+                onClick={() => handleTargetClick(player)}
+              />
+            )}
           </Flex>
         )}
       />

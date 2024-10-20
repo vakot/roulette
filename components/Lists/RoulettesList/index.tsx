@@ -10,7 +10,10 @@ export interface RoulettesListProps {
   onClick?: (player: IPlayer) => void
 }
 
-export const RoulettesList: React.FC<RoulettesListProps> = ({ roulettes: items = [], editable = false }) => {
+export const RoulettesList: React.FC<RoulettesListProps> = ({
+  roulettes: items = [],
+  editable = false,
+}) => {
   const router = useRouter()
 
   return (

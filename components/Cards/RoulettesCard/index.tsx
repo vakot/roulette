@@ -1,4 +1,7 @@
-import { useAddRouletteMutation, useGetRoulettesQuery } from '@modules/api/roulette'
+import {
+  useAddRouletteMutation,
+  useGetRoulettesQuery,
+} from '@modules/api/roulette'
 import { Button, Card, CardProps, Flex, List } from 'antd'
 import { useRouter } from 'next/navigation'
 import { useCallback } from 'react'
@@ -11,7 +14,8 @@ export interface RoulettesCardProps extends CardProps {
 export const RoulettesCard: React.FC<RoulettesCardProps> = ({ editable }) => {
   const router = useRouter()
 
-  const { data: roulettes, isLoading: isRoulettesLoading } = useGetRoulettesQuery()
+  const { data: roulettes, isLoading: isRoulettesLoading } =
+    useGetRoulettesQuery()
 
   const { t } = useTranslation()
 

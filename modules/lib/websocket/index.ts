@@ -1,13 +1,13 @@
 import { Server } from 'socket.io'
 
-let _global = global as typeof globalThis & { io: Server }
+const _global = global as typeof globalThis & { io: Server }
 
 export const initializeSocket = (server: any) => {
   _global.io = new Server(server, {
     cors: {
       origin: '*',
-      methods: ['GET', 'POST']
-    }
+      methods: ['GET', 'POST'],
+    },
   })
 
   _global.io.on('connection', (socket) => {
@@ -23,7 +23,7 @@ export const initializeSocket = (server: any) => {
 
 export function getSocket() {
   if (!_global.io) {
-    throw new Error('Socket.io not initialized')
+    throw new Error('❌ Socket.io not initialized')
   }
   return _global.io
 }

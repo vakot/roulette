@@ -10,7 +10,9 @@ export interface DonatorsCardProps {
   roulette?: IRoulette['_id']
 }
 
-export const DonatorsCard: React.FC<DonatorsCardProps> = ({ roulette: rouletteId }) => {
+export const DonatorsCard: React.FC<DonatorsCardProps> = ({
+  roulette: rouletteId,
+}) => {
   return (
     <Card title={<Title roulette={rouletteId} />}>
       <Body roulette={rouletteId} />
@@ -20,7 +22,9 @@ export const DonatorsCard: React.FC<DonatorsCardProps> = ({ roulette: rouletteId
 
 const Title: React.FC<DonatorsCardProps> = ({ roulette: rouletteId }) => {
   const { data: donators } = useGetPlayersQuery({ roulette: 'none' })
-  const { data: roulette } = useGetRouletteQuery(rouletteId, { skip: !rouletteId })
+  const { data: roulette } = useGetRouletteQuery(rouletteId, {
+    skip: !rouletteId,
+  })
 
   const [editPlayers] = useEditPlayersMutation()
 
@@ -43,9 +47,11 @@ const Title: React.FC<DonatorsCardProps> = ({ roulette: rouletteId }) => {
       type: 'warning',
       onOk: () => {
         if (donators.length && roulette) {
-          editPlayers(donators.map((donator) => ({ ...donator, roulette: roulette._id })))
+          editPlayers(
+            donators.map((donator) => ({ ...donator, roulette: roulette._id }))
+          )
         }
-      }
+      },
     })
   }, [donators, editPlayers, roulette, t])
 
