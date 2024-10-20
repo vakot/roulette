@@ -1,12 +1,15 @@
 import { CloseOutlined } from '@ant-design/icons'
 import type { EditFormProps } from '@components/Forms/types'
 import { RouletteSelector } from '@components/Selectors/RouletteSelector'
+import { ColorPickerFormItem } from '@components/UI/ColorPicker'
 import { useAddPlayerMutation, useEditPlayerMutation, useGetPlayerQuery } from '@modules/api/player'
 import type { IPlayer } from '@modules/models/Player'
 import type { IRoulette } from '@modules/models/Roulette'
-import { Button, ColorPicker, Flex, Form, Input, Spin } from 'antd'
+import { Button, ColorPickerProps, Flex, Form, GetProp, Input, Spin } from 'antd'
 import { useCallback, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+
+type Color = Extract<GetProp<ColorPickerProps, 'value'>, string | { cleared: any }>
 
 export interface EditPlayerFormProps extends EditFormProps<IPlayer> {
   player?: IPlayer['_id']
@@ -32,12 +35,10 @@ export const EditPlayerForm: React.FC<EditPlayerFormProps> = ({
       try {
         const response = player ? await editPlayer({ ...player, ...fields }) : await addPlayer(fields)
 
-        if (response.data) {
-          onFinish?.(response.data)
-        } else if (response.error) {
+        if (response.error) {
           onFinishFailed?.(response.error)
         } else {
-          onFinishFailed?.('unexpected result')
+          onFinish?.(response.data)
         }
       } catch (error: any) {
         onFinishFailed?.(error)
@@ -67,7 +68,7 @@ export const EditPlayerForm: React.FC<EditPlayerFormProps> = ({
         <FormNameColorItem form={form} player={playerId} />
         <FormPriceItem form={form} player={playerId} />
         <FormMessageItem form={form} player={playerId} />
-        <FormRouletteItem form={form} player={playerId} disabled={!!rouletteId} />
+        <FormRouletteItem form={form} player={playerId} />
       </Form>
     </Spin>
   )
@@ -82,9 +83,7 @@ const FormNameColorItem: React.FC<EditPlayerFormProps> = ({ form: _form, player:
         <Form.Item name="name" style={{ flex: 1, margin: 0 }}>
           <Input placeholder={t('Name')} />
         </Form.Item>
-        <Form.Item name="color" style={{ margin: 0 }}>
-          <ColorPicker />
-        </Form.Item>
+        <ColorPickerFormItem name="color" />
       </Flex>
     </Form.Item>
   )

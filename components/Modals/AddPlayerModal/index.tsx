@@ -39,7 +39,14 @@ export const AddPlayerModal: React.FC<AddPlayerModalProps> = ({
   const handleOk = useCallback(() => {
     if (donator && roulette) {
       editDonator({ ...donator, roulette: roulette._id })
-        .then(() => setDonator(null))
+        .then(({ data: donator }) => {
+          setDonator(null)
+          if (!donator) {
+            throw new Error('Failed to donator as a player')
+          }
+          onFinish?.(donator)
+          onOk?.()
+        })
         .catch(() => message.error(t('Failed to donator as a player')))
     } else {
       form.submit()
@@ -73,7 +80,7 @@ export const AddPlayerModal: React.FC<AddPlayerModalProps> = ({
       cancelText={t('Cancel')}
       destroyOnClose={destroyOnClose}
       title={t('Add player modal')}
-      okButtonProps={{ disabled: !donator || isRouletteLoading || isDonatorsLoading || isEditDonatorLoading }}
+      okButtonProps={{ disabled: isRouletteLoading || isDonatorsLoading || isEditDonatorLoading }}
       {...props}>
       <Spin spinning={isRouletteLoading || isDonatorsLoading || isEditDonatorLoading}>
         <Flex gap={8}>

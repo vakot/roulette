@@ -33,15 +33,6 @@
   flex: 1;
 }
 
-.roulette {
-  width: 100%;
-  height: 160px;
-  overflow: hidden;
-}
-.roulette :global(.ant-card-body) {
-  padding: 0;
-}
-
 /* RESPONSIVE */
 
 @media (max-width: 992px) {
