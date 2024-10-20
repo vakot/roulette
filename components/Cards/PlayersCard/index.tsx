@@ -2,13 +2,11 @@ import { PlusOutlined } from '@ant-design/icons'
 import { AddPlayerButton } from '@components/Buttons/AddPlayerButton'
 import { PlayersList } from '@components/Lists/PlayersList'
 import { useGetPlayersQuery } from '@modules/api/player'
-import { IPlayer } from '@modules/models/Player'
 import { IRoulette } from '@modules/models/Roulette'
 import { Card, Flex, Spin } from 'antd'
 import { useTranslation } from 'react-i18next'
 
 export interface PlayersCardProps {
-  players?: IPlayer[]
   roulette?: IRoulette['_id']
 }
 

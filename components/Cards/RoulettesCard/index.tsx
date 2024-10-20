@@ -11,7 +11,7 @@ export interface RoulettesCardProps extends CardProps {
 export const RoulettesCard: React.FC<RoulettesCardProps> = ({ editable }) => {
   const router = useRouter()
 
-  const { data: roulettes } = useGetRoulettesQuery()
+  const { data: roulettes, isLoading: isRoulettesLoading } = useGetRoulettesQuery()
 
   const { t } = useTranslation()
 
@@ -27,10 +27,10 @@ export const RoulettesCard: React.FC<RoulettesCardProps> = ({ editable }) => {
         <Flex gap={8} align="center" justify="space-between">
           <span>{t('roulettes')}</span>
         </Flex>
-      }
-    >
+      }>
       {/* TODO: to sidebar navigation */}
       <List
+        loading={isRoulettesLoading}
         dataSource={roulettes}
         renderItem={(roulette) => (
           <List.Item onClick={() => router.push(`/${roulette._id}`)}>
