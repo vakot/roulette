@@ -1,4 +1,4 @@
-import type { PlayerWithProbability } from '@components/Lists/PlayersList'
+import type { PlayerWithProbability } from '@components/Lists/BasePlayersList'
 import { Avatar, Progress, Space } from 'antd'
 
 export interface PlayerAvatarProps {
