@@ -5,7 +5,7 @@ import { ColorPickerFormItem } from '@components/UI/ColorPicker'
 import { useAddPlayerMutation, useEditPlayerMutation, useGetPlayerQuery } from '@modules/api/player'
 import type { IPlayer } from '@modules/models/Player'
 import type { IRoulette } from '@modules/models/Roulette'
-import { Button, ColorPickerProps, Flex, Form, GetProp, Input, Spin } from 'antd'
+import { Button, ColorPickerProps, Flex, Form, GetProp, Input, Spin, Typography, message } from 'antd'
 import { useCallback, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -37,8 +37,18 @@ export const EditPlayerForm: React.FC<EditPlayerFormProps> = ({
 
         if (response.error) {
           onFinishFailed?.(response.error)
+          if (player) {
+            message.error(<Typography.Text>Failed to update {player.name}</Typography.Text>)
+          } else {
+            message.error(<Typography.Text>Failed to create {fields.name}</Typography.Text>)
+          }
         } else {
           onFinish?.(response.data)
+          if (player) {
+            message.info(<Typography.Text>Player {player.name} successfully updated</Typography.Text>)
+          } else {
+            message.success(<Typography.Text>Player {fields.name} successfully created</Typography.Text>)
+          }
         }
       } catch (error: any) {
         onFinishFailed?.(error)
