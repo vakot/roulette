@@ -51,7 +51,7 @@ export const AddPlayerModal: React.FC<AddPlayerModalProps> = ({
     } else {
       form.submit()
     }
-  }, [form, donator, roulette, editDonator, t])
+  }, [form, donator, roulette, editDonator, onOk, onFinish, t])
 
   const handleSelect = useCallback(
     (value: IPlayer['_id']) => {

@@ -52,7 +52,7 @@ export const PlayersList: React.FC<PlayersListProps> = ({ roulette: rouletteId }
         }
       })
     },
-    [isAdminPage]
+    [rouletteId, isAdminPage, editRoulette]
   )
 
   return (

@@ -1,7 +1,13 @@
+/**
+ * DO NOT USE IMPORT ALLIASES IN THIS FILE
+ * This file is the entry point of the server and should not use any aliases
+ * to ensure that the server can run without any issues.
+ */
 import { createServer } from 'http'
 import next from 'next'
 import { parse } from 'url'
 import { initializeSocket } from './modules/lib/websocket'
+import { getBaseUrl } from './utils/helpers'
 
 const port = parseInt(process.env.PORT ?? '3000', 10)
 const hostname = process.env.HOSTNAME ?? 'localhost'
@@ -23,6 +29,6 @@ app.prepare().then(() => {
       process.exit(1)
     })
     .listen(3000, () => {
-      console.log(`> Ready on http://${hostname}:${port}`)
+      console.log(`> Ready on ${getBaseUrl()}`)
     })
 })

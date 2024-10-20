@@ -15,23 +15,26 @@ export const DontatorsList: React.FC<DonatorsListProps> = ({ roulette: rouletteI
   const { data: donators, isFetching: isDonatorsLoading } = useGetPlayersQuery({ roulette: 'none' })
   const [editDonator, { isLoading: isEditDonatorLoading }] = useEditPlayerMutation()
 
-  const handleRegister = useCallback((donator: IPlayer) => {
-    editDonator({ ...donator, roulette: rouletteId })
-      .then(() =>
-        message.success(
-          <Typography.Text>
-            Donator <Typography.Text strong>{donator.name}</Typography.Text> registered as new player
-          </Typography.Text>
+  const handleRegister = useCallback(
+    (donator: IPlayer) => {
+      editDonator({ ...donator, roulette: rouletteId })
+        .then(() =>
+          message.success(
+            <Typography.Text>
+              Donator <Typography.Text strong>{donator.name}</Typography.Text> registered as new player
+            </Typography.Text>
+          )
         )
-      )
-      .catch(() =>
-        message.error(
-          <Typography.Text>
-            Failed to register <Typography.Text strong>{donator.name}</Typography.Text> as a player
-          </Typography.Text>
+        .catch(() =>
+          message.error(
+            <Typography.Text>
+              Failed to register <Typography.Text strong>{donator.name}</Typography.Text> as a player
+            </Typography.Text>
+          )
         )
-      )
-  }, [])
+    },
+    [rouletteId, editDonator]
+  )
 
   return (
     <Spin spinning={isDonatorsLoading || isEditDonatorLoading}>

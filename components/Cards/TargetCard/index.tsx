@@ -33,7 +33,7 @@ const Body: React.FC<TargetCardProps> = ({ roulette: rouletteId }) => {
 
   const handleRemoveTarget = useCallback(() => {
     editRoulette({ _id: rouletteId, target: null }).then(() => message.success('Target removed. Next winner is random!'))
-  }, [editRoulette])
+  }, [rouletteId, editRoulette])
 
   return (
     <Spin spinning={isRouletteLoading || isBankLoading || isEditRouletteLoading}>
