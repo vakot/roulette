@@ -1,6 +1,6 @@
-import Icon, { EditFilled } from '@ant-design/icons'
-import { EditPlayerButton } from '@components/Buttons/EditPlayerButton'
+import Icon from '@ant-design/icons'
 import { PlayerAvatar } from '@components/Players/Avatar'
+import { PlayerProbability } from '@components/Players/Probability'
 import { IPlayer } from '@modules/models/Player'
 import CoinIcon from '@public/coin-thumb-up-01.svg'
 import { Empty, List, Space, Typography } from 'antd'
@@ -11,30 +11,28 @@ export type PlayerWithProbability = IPlayer & { probability?: number }
 
 export interface BasePlayersListProps {
   players?: PlayerWithProbability[]
-  editable?: boolean
-  onClick?: (player: IPlayer) => void
+  controls?: (player: IPlayer) => React.ReactNode
 }
 
-export const BasePlayersList: React.FC<BasePlayersListProps> = ({ players, editable }) => {
+export const BasePlayersList: React.FC<BasePlayersListProps> = ({ players, controls }) => {
   if (!players?.length) {
     return <Empty />
   }
   return (
-    <List itemLayout="horizontal" dataSource={players} renderItem={(item) => <BasePlayersListItem player={item} editable={editable} />} />
+    <List itemLayout="horizontal" dataSource={players} renderItem={(item) => <BasePlayersListItem player={item} controls={controls} />} />
   )
 }
 
 export interface BasePlayersListItemProps {
   player: PlayerWithProbability
-  editable?: boolean
-  onClick?: (player: IPlayer) => void
+  controls?: BasePlayersListProps['controls']
 }
 
-export const BasePlayersListItem: React.FC<BasePlayersListItemProps> = ({ player, editable }) => {
+export const BasePlayersListItem: React.FC<BasePlayersListItemProps> = ({ player, controls }) => {
   return (
     <List.Item className={styles.hover}>
       <BasePlayersListItemMeta player={player} />
-      {editable && <EditPlayerButton type="primary" icon={<EditFilled />} player={player?._id} />}
+      {controls?.(player)}
     </List.Item>
   )
 }
@@ -46,7 +44,12 @@ export interface BasePlayersListItemMetaProps {
 export const BasePlayersListItemMeta: React.FC<BasePlayersListItemMetaProps> = ({ player }) => {
   return (
     <List.Item.Meta
-      avatar={<PlayerAvatar player={player} />}
+      avatar={
+        <Space>
+          <PlayerProbability player={player} />
+          <PlayerAvatar player={player} />
+        </Space>
+      }
       title={
         <Space>
           <Typography.Text>{player.name ?? 'anonim'}</Typography.Text>
