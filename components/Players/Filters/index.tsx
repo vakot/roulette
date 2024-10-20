@@ -1,5 +1,5 @@
 import { FilterOutlined, SortAscendingOutlined, SortDescendingOutlined } from '@ant-design/icons'
-import { PlayerWithProbability } from '@components/Lists/PlayersList'
+import { PlayerWithProbability } from '@components/Lists/BasePlayersList'
 import { Button, Flex, Form, Input, Select, Slider, Space } from 'antd'
 import { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -29,7 +29,7 @@ export const PlayerFilters: React.FC<PlayerFiltersProps> = ({ players = [], setP
   const { min, max } = useMemo(() => {
     return {
       min: Math.max(Math.min(...players.map(({ price }) => price ?? 0)), 0),
-      max: Math.min(Math.max(...players.map(({ price }) => price ?? 0)), 999_999),
+      max: Math.min(Math.max(...players.map(({ price }) => price ?? 0)), 999_999)
     }
   }, [players])
 
@@ -40,8 +40,7 @@ export const PlayerFilters: React.FC<PlayerFiltersProps> = ({ players = [], setP
         (player) =>
           !price ||
           price.length < 2 ||
-          ((player.price ?? 0) >= (isFinite(price[0]) ? price[0] : min) &&
-            (player.price ?? 0) <= (isFinite(price[1]) ? price[1] : max))
+          ((player.price ?? 0) >= (isFinite(price[0]) ? price[0] : min) && (player.price ?? 0) <= (isFinite(price[1]) ? price[1] : max))
       )
 
     if (sort) {
@@ -65,12 +64,11 @@ export const PlayerFilters: React.FC<PlayerFiltersProps> = ({ players = [], setP
       form={form}
       layout="vertical"
       initialValues={{
-        price: [min, max],
-      }}
-    >
+        price: [min, max]
+      }}>
       <Space direction="vertical" style={{ width: '100%' }}>
         <Form.Item name="name" noStyle>
-          <Input placeholder={t("Search")} />
+          <Input placeholder={t('Search')} />
         </Form.Item>
 
         <Form.Item name="price" noStyle>
@@ -79,11 +77,11 @@ export const PlayerFilters: React.FC<PlayerFiltersProps> = ({ players = [], setP
         <Flex gap={8}>
           <Form.Item name="sort" style={{ flex: 1, margin: 0 }}>
             <Select
-              placeholder={t("Sort by")}
+              placeholder={t('Sort by')}
               options={[
                 { label: `${t('Name')}`, value: 'name' },
                 { label: `${t('Price')}`, value: 'price' },
-                { label: `${t('Probability')}`, value: 'probability' },
+                { label: `${t('Probability')}`, value: 'probability' }
               ]}
               suffixIcon={<FilterOutlined />}
               allowClear

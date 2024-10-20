@@ -5,6 +5,7 @@ import mongoose from 'mongoose'
 
 export interface IPlayer {
   _id: string
+  tipId?: string
   roulette?: IRoulette
   color: string
   name?: string
@@ -15,6 +16,7 @@ export interface IPlayer {
 export type PlayerModelType = Omit<IPlayer, '_id'> & IDocument
 
 export const PlayerSchema = new mongoose.Schema<PlayerModelType>({
+  tipId: { type: String, required: false, unique: true },
   roulette: { type: mongoose.Schema.Types.ObjectId, required: false, ref: 'Roulette' },
   color: { type: String, required: false, default: getRandomColor },
   name: { type: String, required: false, default: 'anonym' },

@@ -1,8 +1,19 @@
+/**
+ * This is what we can receive from donatello.io
+ *
+ * @external https://donatello.to/panel/doc-api?tab=callbacks
+ */
 export interface ITip {
-  tipId: string
-  username?: string
+  pubId: string
+  clientName?: string
+  message?: string
   amount?: number
   currency?: string
-  message?: string
-  avatar?: string
+  source?: string
+  goal?: string
+  interactionMedia?: string
+  interactionMediaStartTime?: number
+  show?: boolean
+  isPaidFee?: boolean
+  createdAt?: number
 }

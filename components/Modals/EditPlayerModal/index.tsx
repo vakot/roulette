@@ -8,11 +8,13 @@ import { useTranslation } from 'react-i18next'
 
 export interface EditPlayerModalProps extends EditModalProps<IPlayer> {
   player?: IPlayer['_id']
+  players?: IPlayer['_id'][]
   roulette?: IRoulette['_id']
 }
 
 export const EditPlayerModal: React.FC<EditPlayerModalProps> = ({
   player,
+  players,
   roulette: rouletteId,
   onOk,
   onCancel,
@@ -51,8 +53,7 @@ export const EditPlayerModal: React.FC<EditPlayerModalProps> = ({
       cancelText={t('Cancel')}
       destroyOnClose={destroyOnClose}
       title={t('Edit player modal')}
-      {...props}
-    >
+      {...props}>
       <EditPlayerForm form={form} player={player} roulette={rouletteId} onFinish={handleFinish} />
     </Modal>
   )
