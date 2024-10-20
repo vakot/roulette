@@ -1,12 +1,9 @@
 import { playerApi } from '@modules/api/player'
-import dbConnect from '@modules/lib/mongoose'
 import Player from '@modules/models/Player'
 import { ITip } from '@modules/models/Tip'
 import { invalidatesTags } from '@modules/store/utils/invalidatesTags'
 import { getRandomColor } from '@utils/helpers'
 import { NextRequest, NextResponse } from 'next/server'
-
-dbConnect()
 
 export async function POST(request: NextRequest) {
   try {

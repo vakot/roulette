@@ -1,8 +1,5 @@
-import dbConnect from '@modules/lib/mongoose'
 import Roulette, { IRoulette } from '@modules/models/Roulette'
 import { NextRequest, NextResponse } from 'next/server'
-
-dbConnect()
 
 export async function GET(request: NextRequest) {
   try {

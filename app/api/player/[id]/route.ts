@@ -1,9 +1,6 @@
-import dbConnect from '@modules/lib/mongoose'
 import Player from '@modules/models/Player'
 import { toUpdateQuery } from '@utils/helpers'
 import { NextRequest, NextResponse } from 'next/server'
-
-dbConnect()
 
 export async function GET(
   request: NextRequest,

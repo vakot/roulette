@@ -1,9 +1,6 @@
-import dbConnect from '@modules/lib/mongoose'
 import Player, { IPlayer } from '@modules/models/Player'
 import { FilterQuery } from 'mongoose'
 import { NextRequest, NextResponse } from 'next/server'
-
-dbConnect()
 
 export async function GET(request: NextRequest) {
   try {
