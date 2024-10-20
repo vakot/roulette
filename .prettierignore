@@ -9,10 +9,6 @@ node_modules
 .github
 .husky
 
-# Ignore configuration files
-*.config.*
-*.config.*
-
 # Ignore any log files
 *.log
 

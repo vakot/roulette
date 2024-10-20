@@ -18,6 +18,9 @@ const config = [
     'prettier'
   ),
   {
+    ignores: ['node_modules/*', '.next/*', '.dist/*', '.github/*', '.husky/*'],
+  },
+  {
     plugins: {
       '@typescript-eslint': typescriptEslint,
     },
