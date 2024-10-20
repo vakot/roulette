@@ -23,7 +23,7 @@ export const initializeSocket = (server: any) => {
 
 export function getSocket() {
   if (!_global.io) {
-    throw new Error('Socket.io not initialized')
+    throw new Error('❌ Socket.io not initialized')
   }
   return _global.io
 }

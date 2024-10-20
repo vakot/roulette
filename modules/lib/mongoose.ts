@@ -24,11 +24,11 @@ export async function initializeDatabase() {
     cached.promise = mongoose
       .connect(uri, options)
       .then((mongoose) => {
-        console.log('🚀 Successfully connected to database')
+        console.log('🚀 Connected to database')
         return mongoose
       })
       .catch((error) => {
-        console.error('🔴 Failed to connect to MongoDB:', error)
+        console.error('❌ Failed to connect to MongoDB:', error)
         throw error
       })
   }
