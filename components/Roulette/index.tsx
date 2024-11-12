@@ -1,5 +1,11 @@
 import { duplicateArray, toShuffled } from '@utils/helpers'
-import React, { useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react'
+import React, {
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 import './styles.css'
 
 export type RouletteHandler = {
@@ -20,8 +26,20 @@ export interface RouletteProps<T = unknown> {
   style?: React.CSSProperties
 }
 
-const RouletteComponent = <T,>(props: RouletteProps<T>, ref: React.ForwardedRef<HTMLDivElement>): React.ReactElement => {
-  const { roulette, items, render, onFinish, duration = 10000, fakes = 5, className, style } = props
+const RouletteComponent = <T,>(
+  props: RouletteProps<T>,
+  ref: React.ForwardedRef<HTMLDivElement>
+): React.ReactElement => {
+  const {
+    roulette,
+    items,
+    render,
+    onFinish,
+    duration = 10000,
+    fakes = 5,
+    className,
+    style,
+  } = props
 
   const [spinning, setSpinning] = useState<boolean>(false)
 
@@ -41,7 +59,8 @@ const RouletteComponent = <T,>(props: RouletteProps<T>, ref: React.ForwardedRef<
   }, [wrapperWidth, itemsWidth])
 
   useEffect(() => {
-    const getDimensions = () => setWrapperWidth(wrapperRef.current?.offsetWidth ?? 0)
+    const getDimensions = () =>
+      setWrapperWidth(wrapperRef.current?.offsetWidth ?? 0)
 
     getDimensions()
 
@@ -53,7 +72,9 @@ const RouletteComponent = <T,>(props: RouletteProps<T>, ref: React.ForwardedRef<
 
   useEffect(() => {
     itemRefs.current = itemRefs.current.slice(0, items?.length)
-    setItemsWidth(itemRefs.current.reduce((acc, item) => acc + item!.offsetWidth, 0) ?? 0)
+    setItemsWidth(
+      itemRefs.current.reduce((acc, item) => acc + item!.offsetWidth, 0) ?? 0
+    )
   }, [items])
 
   const fakeItemsEnd = useMemo(() => {
@@ -66,12 +87,18 @@ const RouletteComponent = <T,>(props: RouletteProps<T>, ref: React.ForwardedRef<
   useImperativeHandle(
     roulette,
     () => ({
-      spin: (target = Math.floor(Math.random() * ((items?.length ?? 0) - 1))) => {
+      spin: (
+        target = Math.floor(Math.random() * ((items?.length ?? 0) - 1))
+      ) => {
         if (spinning) {
           return
         }
 
-        if (!reelRef.current || !wrapperRef.current || !itemRefs.current[target]) {
+        if (
+          !reelRef.current ||
+          !wrapperRef.current ||
+          !itemRefs.current[target]
+        ) {
           return
         }
 
@@ -94,7 +121,9 @@ const RouletteComponent = <T,>(props: RouletteProps<T>, ref: React.ForwardedRef<
 
         setTimeout(() => {
           setSpinning(false)
-          onFinish?.(items?.[target]!)
+          if (items && target >= 0 && target < items.length) {
+            onFinish?.(items?.[target])
+          }
         }, duration)
       },
       reset: () => {
@@ -106,13 +135,16 @@ const RouletteComponent = <T,>(props: RouletteProps<T>, ref: React.ForwardedRef<
         reelRef.current.style.transform = `translateX(50%)`
 
         setSpinning(false)
-      }
+      },
     }),
     [items, duration, spinning, onFinish]
   )
 
   return (
-    <div className={['roulette-wrapper', className].join(' ')} style={style} ref={wrapperRef}>
+    <div
+      className={['roulette-wrapper', className].join(' ')}
+      style={style}
+      ref={wrapperRef}>
       <div className="roulette-reel" ref={reelRef}>
         {fakeItemsStart.map((item, index) => (
           <div className="roulette-item roulette-fake-item" key={index}>
@@ -142,9 +174,14 @@ const RouletteComponent = <T,>(props: RouletteProps<T>, ref: React.ForwardedRef<
 
 const useRoulette = () => useRef<RouletteHandler>(null)
 
-const Roulette = React.forwardRef<HTMLDivElement, RouletteProps>(RouletteComponent) as unknown as (<T>(
+const Roulette = React.forwardRef<HTMLDivElement, RouletteProps>(
+  RouletteComponent
+) as unknown as (<T>(
   props: RouletteProps<T> & { ref?: React.ForwardedRef<HTMLDivElement> }
-) => ReturnType<typeof RouletteComponent>) & { displayName: string; useRoulette: typeof useRoulette }
+) => ReturnType<typeof RouletteComponent>) & {
+  displayName: string
+  useRoulette: typeof useRoulette
+}
 
 Roulette.displayName = 'Roulette'
 Roulette.useRoulette = useRoulette

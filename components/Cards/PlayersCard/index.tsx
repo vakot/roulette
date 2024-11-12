@@ -10,8 +10,13 @@ export interface PlayersCardProps {
   roulette?: IRoulette['_id']
 }
 
-export const PlayersCard: React.FC<PlayersCardProps> = ({ roulette: rouletteId }) => {
-  const { isFetching: isPlayersLoading } = useGetPlayersQuery({ roulette: rouletteId }, { skip: !rouletteId })
+export const PlayersCard: React.FC<PlayersCardProps> = ({
+  roulette: rouletteId,
+}) => {
+  const { isFetching: isPlayersLoading } = useGetPlayersQuery(
+    { roulette: rouletteId },
+    { skip: !rouletteId }
+  )
 
   return (
     <Spin spinning={isPlayersLoading}>
@@ -23,7 +28,10 @@ export const PlayersCard: React.FC<PlayersCardProps> = ({ roulette: rouletteId }
 }
 
 const Title: React.FC<PlayersCardProps> = ({ roulette: rouletteId }) => {
-  const { data: players } = useGetPlayersQuery({ roulette: rouletteId }, { skip: !rouletteId })
+  const { data: players } = useGetPlayersQuery(
+    { roulette: rouletteId },
+    { skip: !rouletteId }
+  )
 
   const { t } = useTranslation()
 
@@ -33,7 +41,11 @@ const Title: React.FC<PlayersCardProps> = ({ roulette: rouletteId }) => {
         {t('players')} - {players?.length ?? 0}
       </span>
       <span>
-        <AddPlayerButton icon={<PlusOutlined />} type="primary" roulette={rouletteId} />
+        <AddPlayerButton
+          icon={<PlusOutlined />}
+          type="primary"
+          roulette={rouletteId}
+        />
       </span>
     </Flex>
   )

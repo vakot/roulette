@@ -6,5 +6,11 @@ export interface PlayerAvatarProps {
 }
 
 export const PlayerAvatar: React.FC<PlayerAvatarProps> = ({ player }) => {
-  return <Avatar src={player?.avatar} style={{ border: `3px solid ${player?.color}` }} size={48} />
+  return (
+    <Avatar
+      src={player?.avatar}
+      style={{ border: `3px solid ${player?.color}` }}
+      size={48}
+    />
+  )
 }

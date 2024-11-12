@@ -8,7 +8,7 @@ import { LanguageSelector } from '../LanguageSelector'
 import styles from './style.module.css'
 
 export default function MainLayout({
-  children
+  children,
 }: Readonly<{
   children: React.ReactNode
 }>): React.ReactElement {
@@ -20,7 +20,9 @@ export default function MainLayout({
           <LanguageSelector />
         </div>
       </Layout.Header>
-      <Layout.Content className={styles['layout-content']}>{children}</Layout.Content>
+      <Layout.Content className={styles['layout-content']}>
+        {children}
+      </Layout.Content>
     </Layout>
   )
 }

@@ -13,7 +13,7 @@ export const usePlayers = (): {
   const getRandomPlayers = useCallback((length: number = 10) => {
     return Array.from({ length }).map(() => ({
       name: getRandomName(),
-      price: Math.random() * (1000 - 100) + 100
+      price: Math.random() * (1000 - 100) + 100,
     }))
   }, [])
 

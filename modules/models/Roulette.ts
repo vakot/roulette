@@ -10,11 +10,20 @@ export interface IRoulette {
 export type RouletteModelType = Omit<IRoulette, '_id'> & IDocument
 
 export const RouletteSchema = new mongoose.Schema<RouletteModelType>({
-  winner: { type: mongoose.Schema.Types.ObjectId, required: false, ref: 'Player' },
-  target: { type: mongoose.Schema.Types.ObjectId, required: false, ref: 'Player' }
+  winner: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: false,
+    ref: 'Player',
+  },
+  target: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: false,
+    ref: 'Player',
+  },
 }).plugin(timestamp)
 
 const Roulette =
-  mongoose.models.Roulette<mongoose.Model<RouletteModelType>> || mongoose.model<RouletteModelType>('Roulette', RouletteSchema)
+  mongoose.models.Roulette<mongoose.Model<RouletteModelType>> ||
+  mongoose.model<RouletteModelType>('Roulette', RouletteSchema)
 
 export default Roulette

@@ -9,7 +9,9 @@ export interface WinnerCardProps {
   roulette?: IRoulette['_id']
 }
 
-export const WinnerCard: React.FC<WinnerCardProps> = ({ roulette: rouletteId }) => {
+export const WinnerCard: React.FC<WinnerCardProps> = ({
+  roulette: rouletteId,
+}) => {
   return (
     <Card title={<Title roulette={rouletteId} />}>
       <Body roulette={rouletteId} />
@@ -24,12 +26,21 @@ const Title: React.FC<WinnerCardProps> = ({ roulette: rouletteId }) => {
 }
 
 const Body: React.FC<WinnerCardProps> = ({ roulette: rouletteId }) => {
-  const { data: roulette, isFetching: isRouletteLoading } = useGetRouletteQuery(rouletteId, { skip: !rouletteId })
+  const { data: roulette, isFetching: isRouletteLoading } = useGetRouletteQuery(
+    rouletteId,
+    { skip: !rouletteId }
+  )
   const [bank, { isLoading: isBankLoading }] = useBank(rouletteId)
 
   return (
     <Spin spinning={isRouletteLoading || isBankLoading}>
-      <BasePlayersList players={roulette?.winner ? [{ ...roulette.winner, price: Number((bank * 0.9).toFixed(2)) }] : []} />
+      <BasePlayersList
+        players={
+          roulette?.winner
+            ? [{ ...roulette.winner, price: Number((bank * 0.9).toFixed(2)) }]
+            : []
+        }
+      />
     </Spin>
   )
 }

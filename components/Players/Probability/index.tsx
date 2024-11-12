@@ -6,12 +6,24 @@ export interface PlayerProbabilityProps {
   player: PlayerWithProbability
 }
 
-export const PlayerProbability: React.FC<PlayerProbabilityProps> = ({ player }) => {
+export const PlayerProbability: React.FC<PlayerProbabilityProps> = ({
+  player,
+}) => {
   const isAdminPage = useAdminPathname()
 
-  if (!isAdminPage || player.probability === undefined || player.probability === null) {
+  if (
+    !isAdminPage ||
+    player.probability === undefined ||
+    player.probability === null
+  ) {
     return null
   }
 
-  return <Progress type="circle" percent={Number((player.probability * 100).toFixed(1))} size={48} />
+  return (
+    <Progress
+      type="circle"
+      percent={Number((player.probability * 100).toFixed(1))}
+      size={48}
+    />
+  )
 }
