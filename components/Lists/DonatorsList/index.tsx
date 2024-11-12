@@ -4,7 +4,7 @@ import {
   BasePlayersListItemMeta,
 } from '@components/Lists/BasePlayersList'
 import { useEditPlayerMutation, useGetPlayersQuery } from '@modules/api/player'
-import { IDonator } from '@modules/models/IDonator'
+import { IDonator } from '@modules/models/Donator'
 import { IPlayer } from '@modules/models/Player'
 import { Button, List, message, Modal, Spin, Typography } from 'antd'
 import { useCallback } from 'react'
