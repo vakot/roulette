@@ -1,11 +1,4 @@
 #!/bin/sh
-
-if [ "$(uname)" = "Darwin" ]; then
-  HUSKY_PATH="$(dirname "$0")/_/husky.sh"
-else
-  HUSKY_PATH="$(cygpath "$(dirname "$0")/_/husky.sh")"
-fi
-
-. "$HUSKY_PATH"
+. "$(dirname "$0")/_/husky.sh"
 
 npx lint-staged
