@@ -2,7 +2,7 @@ import { DontatorsList } from '@components/Lists/DonatorsList'
 import { useEditPlayersMutation, useGetPlayersQuery } from '@modules/api/player'
 import { useGetRouletteQuery } from '@modules/api/roulette'
 import { IRoulette } from '@modules/models/Roulette'
-import { Button, Card, Flex, message, Modal } from 'antd'
+import { Button, Card, Flex, Modal, message } from 'antd'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -61,9 +61,11 @@ const Title: React.FC<DonatorsCardProps> = ({ roulette: rouletteId }) => {
         {t('donators')} - {donators?.length ?? 0}
       </span>
       <span>
-        <Button type="primary" onClick={handleRegisterAll}>
-          {t('register-all')}
-        </Button>
+        {(!!rouletteId) && (
+          <Button type="primary" onClick={handleRegisterAll}>
+            {t('register-all')}
+          </Button>
+        )}
       </span>
     </Flex>
   )
